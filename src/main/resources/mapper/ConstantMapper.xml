@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.seeyoo.visit.mapper.ConstantMapper">
+  <resultMap id="BaseResultMap" type="com.seeyoo.visit.model.Constant">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <result column="id" jdbcType="INTEGER" property="id" />
+    <result column="vaild_adb" jdbcType="INTEGER" property="vaildAdb" />
+    <result column="vailde_bdb" jdbcType="INTEGER" property="vaildeBdb" />
+    <result column="vaild_padb" jdbcType="INTEGER" property="vaildPadb" />
+    <result column="vaild_pbdb" jdbcType="INTEGER" property="vaildPbdb" />
+    <result column="a_level" jdbcType="INTEGER" property="aLevel" />
+    <result column="b_level" jdbcType="INTEGER" property="bLevel" />
+  </resultMap>
+</mapper>
