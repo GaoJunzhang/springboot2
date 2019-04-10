@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import tk.mybatis.mapper.entity.Example;
+import tk.mybatis.mapper.util.StringUtil;
 
 import java.util.*;
 
@@ -88,12 +89,12 @@ public class AssetsController {
         return ResultVO.getSuccess("success");
     }
 
-    @RequestMapping(value = "getAssetsByMac",method = RequestMethod.GET)
+    @RequestMapping(value = "getAssetsByMac",method = RequestMethod.POST)
     @ApiOperation(value = "资产信息")
     @ApiImplicitParam(paramType = "arry",name = "macs",value = "Array",dataType = "Array")
     public ResultVO getAssetsByMac(String macs){
-        if (macs==null){
-            return ResultVO.getSuccess("Terminal'macs is null");
+        if (StringUtil.isEmpty(macs)){
+            return ResultVO.getFailed("Terminal'macs is null");
         }
         macs = macs.substring(0,macs.length()-1);
         String[] marr = macs.split(",");
