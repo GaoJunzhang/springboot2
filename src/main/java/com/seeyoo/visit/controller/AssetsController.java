@@ -5,17 +5,21 @@ import com.seeyoo.visit.bean.TerminalBean;
 import com.seeyoo.visit.model.Assets;
 import com.seeyoo.visit.result.ResultVO;
 import com.seeyoo.visit.service.AssetsService;
-import io.swagger.annotations.*;
-import net.sf.json.JSONArray;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import tk.mybatis.mapper.entity.Example;
-import tk.mybatis.mapper.util.StringUtil;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/assets")
@@ -89,18 +93,15 @@ public class AssetsController {
         return ResultVO.getSuccess("success");
     }
 
-    @RequestMapping(value = "getAssetsByMac",method = RequestMethod.POST)
+    @RequestMapping(value = "getAssetsByMac",method = RequestMethod.POST,params = "macs")
     @ApiOperation(value = "资产信息")
     @ApiImplicitParam(paramType = "arry",name = "macs",value = "Array",dataType = "Array")
-    public ResultVO getAssetsByMac(String macs){
-        if (StringUtil.isEmpty(macs)){
+    public ResultVO getAssetsByMac(@RequestParam("macs") List<String> macs){
+        if (macs.size()<=0){
             return ResultVO.getFailed("Terminal'macs is null");
         }
-        macs = macs.substring(0,macs.length()-1);
-        String[] marr = macs.split(",");
-        Iterable<String> iterable  = Arrays.asList(marr);
         Example example = new Example(Assets.class);
-        example.createCriteria().andIn("mac",iterable);
+        example.createCriteria().andIn("mac",macs);
         List<Assets> assets = assetsService.selectByExample(example);
         return ResultVO.getSuccess("success",assets);
     }
