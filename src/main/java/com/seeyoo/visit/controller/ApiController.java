@@ -77,7 +77,7 @@ public class ApiController {
                         JSONArray macsArry = JSONArray.fromObject(obj.get("macs"));
                         for (int j = 0; j < macsArry.size(); j++) {
                             macObj = JSONObject.fromObject(macsArry.get(j));
-                            VisitProbe visitProbe = visitProbeService.selectByMacAndTime(macObj.get("mac") + "",Timestamp.valueOf(macObj.get("begin")+""));
+                            VisitProbe visitProbe = visitProbeService.selectByMacAndTimeAndAssetsId(macObj.get("mac") + "",Timestamp.valueOf(macObj.get("begin")+""),assetsId);
                             if (visitProbe==null){
                                 visitProbe = new VisitProbe();
                                 visitProbe.setBeginTime(Timestamp.valueOf(macObj.get("begin")+""));

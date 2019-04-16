@@ -11,7 +11,7 @@ import java.sql.Timestamp;
 import java.util.List;
 
 public interface VisitProbeService extends IService<VisitProbe> {
-    public VisitProbe selectByMacAndTime(String mac, Timestamp beginTime);
+    public VisitProbe selectByMacAndTimeAndAssetsId(String mac, Timestamp beginTime,Integer assetsId);
 
     public PageInfo<VisitStatisBean> selectByPage(Timestamp start, Timestamp end, Integer assetsId, int page, int size);
 
@@ -31,4 +31,5 @@ public interface VisitProbeService extends IService<VisitProbe> {
     public List<AssetsBean> top10Assets(Timestamp start, Timestamp end);
 
     public List<AssetsBean> top10VaildAssets(Timestamp start, Timestamp end, int sdb, int edb);
+
 }

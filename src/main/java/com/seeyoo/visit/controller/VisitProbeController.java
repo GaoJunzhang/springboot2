@@ -118,10 +118,10 @@ public class VisitProbeController {
             if (date.equals(StringTools.timeStapm2Str(visitRecord.getBeginTime()))) {
 
                 visitCount++;
-                if (Math.abs(visitRecord.getDb()) > aDb && Math.abs(visitRecord.getDb()) < bDb) {
+                if (Math.abs(visitRecord.getDb()) >= aDb && Math.abs(visitRecord.getDb()) <= bDb) {
                     vaildCount++;
                 }
-                if (Math.abs(visitRecord.getDb()) > pAdb && Math.abs(visitRecord.getDb()) < pBdb) {
+                if (Math.abs(visitRecord.getDb()) >= pAdb && Math.abs(visitRecord.getDb()) <= pBdb) {
                     passCount++;
                 }
             }
@@ -185,10 +185,10 @@ public class VisitProbeController {
                 int rMin = visitTimeBean.getVisitTime().intValue() > 0 ? visitTimeBean.getVisitTime().intValue() / 60 : 1;
                 allcount += visitTimeBean.getVisitCount().intValue();
                 allMin += rMin;
-                if (rMin > rlevel) {
+                if (rMin >= rlevel) {
                     rCount++;
                 }
-                if (rMin > mlevel) {
+                if (rMin >= mlevel) {
                     mCount++;
                 }
             }

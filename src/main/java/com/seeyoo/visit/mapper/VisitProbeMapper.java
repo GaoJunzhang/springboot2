@@ -12,7 +12,7 @@ import java.sql.Timestamp;
 import java.util.List;
 
 public interface VisitProbeMapper extends MyMapper<VisitProbe> {
-    public VisitProbe selectByMacAndTime(@Param("mac") String mac, @Param("beginTime")Timestamp beginTime);
+    public VisitProbe selectByMacAndTimeAndAssetsId(@Param("mac") String mac, @Param("beginTime")Timestamp beginTime, @Param("assetsId") Integer assetsId);
 
     public List<VisitStatisBean> DailysByPage(@Param("start") Timestamp start, @Param("end") Timestamp end, @Param("assetsId") Integer assetsId);
 

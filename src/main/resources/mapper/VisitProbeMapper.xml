@@ -30,13 +30,16 @@
         <result column="name" jdbcType="VARCHAR" property="name"/>
         <result column="avCount" jdbcType="BIGINT" property="avCount"/>
     </resultMap>
-    <select id="selectByMacAndTime" parameterType="com.seeyoo.visit.model.VisitProbe" resultMap="BaseResultMap">
+    <select id="selectByMacAndTimeAndAssetsId" parameterType="com.seeyoo.visit.model.VisitProbe" resultMap="BaseResultMap">
         select * from visit_probe where 1=1
         <if test="beginTime!=null">
             and begin_time=#{beginTime}
         </if>
         <if test="mac!=null and mac!=''">
             and mac=#{mac}
+        </if>
+        <if test="assetsId!=null">
+            and assets_id=#{assetsId}
         </if>
     </select>
     <select id="DailysByPage" parameterType="com.seeyoo.visit.bean.VisitBean" resultMap="VisitStatisResultMap">

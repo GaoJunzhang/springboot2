@@ -20,8 +20,8 @@ public class VisitProbeServiceImpl extends BaseService<VisitProbe> implements Vi
     @Autowired
     private VisitProbeMapper visitProbeMapper;
 
-    public VisitProbe selectByMacAndTime(String mac, Timestamp beginTime) {
-        return visitProbeMapper.selectByMacAndTime(mac, beginTime);
+    public VisitProbe selectByMacAndTimeAndAssetsId(String mac, Timestamp beginTime,Integer assetsId) {
+        return visitProbeMapper.selectByMacAndTimeAndAssetsId(mac, beginTime,assetsId);
     }
 
     public PageInfo<VisitStatisBean> selectByPage(Timestamp start, Timestamp end, Integer assetsId, int page, int size) {
