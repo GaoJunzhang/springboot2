@@ -32,4 +32,6 @@ public interface VisitProbeService extends IService<VisitProbe> {
 
     public List<AssetsBean> top10VaildAssets(Timestamp start, Timestamp end, int sdb, int edb);
 
+    public int countOldByTime(Timestamp start, Timestamp end);
+
 }

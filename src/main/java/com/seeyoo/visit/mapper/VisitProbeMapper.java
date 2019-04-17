@@ -33,4 +33,6 @@ public interface VisitProbeMapper extends MyMapper<VisitProbe> {
     public List<AssetsBean> top10Assets(@Param("start") Timestamp start, @Param("end") Timestamp end);
 
     public List<AssetsBean> top10VaildAssets(@Param("start") Timestamp start, @Param("end") Timestamp end,@Param("sdb") int sdb,@Param("edb") int edb);
+
+    public int countOldByTime(@Param("start") Timestamp start, @Param("end") Timestamp end);
 }

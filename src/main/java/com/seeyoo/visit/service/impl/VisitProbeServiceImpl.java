@@ -61,4 +61,8 @@ public class VisitProbeServiceImpl extends BaseService<VisitProbe> implements Vi
     public List<AssetsBean> top10VaildAssets(Timestamp start, Timestamp end, int sdb, int edb){
         return visitProbeMapper.top10VaildAssets(start,end,sdb,edb);
     }
+
+    public int countOldByTime(Timestamp start, Timestamp end){
+        return visitProbeMapper.countOldByTime(start,end);
+    }
 }

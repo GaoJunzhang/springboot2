@@ -15,6 +15,7 @@ import io.swagger.annotations.ApiOperation;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -36,7 +37,8 @@ public class ApiController {
     private OldCustomersService oldCustomersService;
     @Autowired
     private AssetsService assetsService;
-
+    @Value("${vdb.oldTime}")
+    private int oldTime;
 
     @ApiOperation(value = "记录探针")
     @ApiImplicitParam(name = "jsonObject", value = "Json Object", required = true, dataType = "JsonObj", paramType = "path")
@@ -78,6 +80,21 @@ public class ApiController {
                         for (int j = 0; j < macsArry.size(); j++) {
                             macObj = JSONObject.fromObject(macsArry.get(j));
                             VisitProbe visitProbe = visitProbeService.selectByMacAndTimeAndAssetsId(macObj.get("mac") + "",Timestamp.valueOf(macObj.get("begin")+""),assetsId);
+                            Example example1 = new Example(OldCustomers.class);
+                            example1.createCriteria().andEqualTo("mac",macObj.get("mac"));
+                            List<OldCustomers> oldCustomers = oldCustomersService.selectByExample(example1);
+                            short isOld = 0;
+                            if (oldCustomers.size() <= 0) {
+                                OldCustomers oldCustomers1 = new OldCustomers();
+                                oldCustomers1.setCreateTime(time1);
+                                oldCustomers1.setMac(macObj.get("mac") + "");
+                                oldCustomersService.save(oldCustomers1);
+                            }else {
+                                OldCustomers oldTmp = oldCustomers.get(0);
+                                if (time1.getTime()-oldTmp.getCreateTime().getTime()>=oldTime){
+                                    isOld=1;
+                                }
+                            }
                             if (visitProbe==null){
                                 visitProbe = new VisitProbe();
                                 visitProbe.setBeginTime(Timestamp.valueOf(macObj.get("begin")+""));
@@ -85,20 +102,16 @@ public class ApiController {
                                 visitProbe.setMac(macObj.get("mac") + "");
                                 visitProbe.setAssetsId(assetsId);
                                 visitProbe.setDb(Integer.parseInt(macObj.get("db") + ""));
+                                visitProbe.setIsOld(isOld);
                                 visitProbeService.save(visitProbe);
                             }else {
-                                 visitProbe.setDb(Integer.parseInt(macObj.get("db") + ""));
+                                if (visitProbe.getDb()<Integer.parseInt(macObj.get("db") + "")){
+
+                                    visitProbe.setDb(Integer.parseInt(macObj.get("db") + ""));
+                                }
                                 visitProbe.setEndTime(Timestamp.valueOf(macObj.get("end")+""));
+                                visitProbe.setIsOld(isOld);
                                 visitProbeService.updateNotNull(visitProbe);
-                            }
-                            Example example1 = new Example(OldCustomers.class);
-                            example1.createCriteria().andEqualTo("mac",macObj.get("mac"));
-                            List<OldCustomers> oldCustomers = oldCustomersService.selectByExample(example1);
-                            if (oldCustomers.size() <= 0) {
-                                OldCustomers oldCustomers1 = new OldCustomers();
-                                oldCustomers1.setCreateTime(time1);
-                                oldCustomers1.setMac(macObj.get("mac") + "");
-                                oldCustomersService.save(oldCustomers1);
                             }
                         }
                     }

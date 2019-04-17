@@ -331,16 +331,16 @@ public class VisitProbeController {
             startCalendar.add(Calendar.DATE, 1);
         }
         int visitAllTime = visitProbeService.getAllVisitTime(Timestamp.valueOf(startDate + " 00:00:00"), Timestamp.valueOf(endDate + " 23:59:59"));//所有访问时间
-        List<OldCustomers> regularCustomers = oldCustomersService.selectAll();//全部老客户
-        List<DayVisitBean> allCustomer = visitProbeService.dayVisiters(Timestamp.valueOf(startDate + " 00:00:00"), Timestamp.valueOf(endDate + " 23:59:59"));
-        int oldCustomer = 0;
-        if (allCustomer != null) {
-            for (DayVisitBean dayVisitBean : allCustomer) {
-                if (isOldCustomer(regularCustomers, dayVisitBean.getMac(), dayVisitBean.getTime())) {
-                    oldCustomer++;
-                }
-            }
-        }
+//        List<OldCustomers> regularCustomers = oldCustomersService.selectAll();//全部老客户
+//        List<DayVisitBean> allCustomer = visitProbeService.dayVisiters(Timestamp.valueOf(startDate + " 00:00:00"), Timestamp.valueOf(endDate + " 23:59:59"));//时间范围内访问的全部客户
+        int oldCustomer = visitProbeService.countOldByTime(Timestamp.valueOf(startDate + " 00:00:00"), Timestamp.valueOf(endDate + " 23:59:59"));//时间范围内访问的老客户
+//        if (allCustomer != null) {
+//            for (DayVisitBean dayVisitBean : allCustomer) {
+//                if (isOldCustomer(regularCustomers, dayVisitBean.getMac(), dayVisitBean.getTime())) {
+//                    oldCustomer++;
+//                }
+//            }
+//        }
         map.put("visitAllTime", visitAllTime);
         map.put("list", visitRecordBeans);
         map.put("oldCustomer", oldCustomer);

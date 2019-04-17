@@ -29,5 +29,6 @@ public class VisitProbe {
 
     private Timestamp time;
 
-
+    @Column(name = "is_old")
+    private Short isOld;
 }

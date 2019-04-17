@@ -200,4 +200,8 @@
         LIMIT 0,
          10
     </select>
+    <select id="countOldByTime" parameterType="com.seeyoo.visit.bean.VisitBean" resultType="java.lang.Integer">
+        SELECT count(1) from visit_probe t where t.is_old=1
+        and (t.begin_time BETWEEN #{start} AND #{end})
+    </select>
 </mapper>
