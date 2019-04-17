@@ -236,13 +236,13 @@ public class VisitProbeController {
         tCalendar.setTime(startCalendar.getTime());
         PageInfo<VisitStatisBean> pages = visitProbeService.selectByPage(Timestamp.valueOf(startDate + " 00:00:00"), Timestamp.valueOf(endDate + " 23:59:59"), assetsId, page, rows);
         List<VisitStatisBean> visitStatisBeans = pages.getList();
-        List<OldCustomers> regularCustomers = oldCustomersService.selectAll();
+//        List<OldCustomers> regularCustomers = oldCustomersService.selectAll();
         List<Map<String, String>> list = new ArrayList<Map<String, String>>(pages.getSize());
         for (VisitStatisBean visitStatisBean : visitStatisBeans) {
             Map<String, String> map2 = new HashMap<String, String>();
-            int oldCount = 0;
+            int oldCount = visitProbeService.dayOldVisits(StringTools.dateToString(visitStatisBean.getVisitDate()), assetsId);
             int allCount = Integer.parseInt(visitStatisBean.getVisitCount() + "");
-            List<DayVisitBean> dayVisitBeans = visitProbeService.dayVisits(StringTools.dateToString(visitStatisBean.getVisitDate()), assetsId);
+/*            List<DayVisitBean> dayVisitBeans = visitProbeService.dayVisits(StringTools.dateToString(visitStatisBean.getVisitDate()), assetsId);
             if (dayVisitBeans != null) {
 
                 for (DayVisitBean dayVisitBean : dayVisitBeans) {
@@ -250,7 +250,7 @@ public class VisitProbeController {
                         oldCount += Integer.parseInt(dayVisitBean.getVisitDayCount() + "");
                     }
                 }
-            }
+            }*/
             map2.put("visitDate", StringTools.dateToString(visitStatisBean.getVisitDate()));//日期
             map2.put("newCustomerRate", allCount > 0 ? df.format((float) (allCount - oldCount) * 100 / allCount) : "0");//新客比率
             map2.put("newCustomerCount", allCount - oldCount + "");//新客数量

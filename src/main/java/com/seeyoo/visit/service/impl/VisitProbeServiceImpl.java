@@ -65,4 +65,8 @@ public class VisitProbeServiceImpl extends BaseService<VisitProbe> implements Vi
     public int countOldByTime(Timestamp start, Timestamp end){
         return visitProbeMapper.countOldByTime(start,end);
     }
+
+    public int dayOldVisits( String time, Integer assetsId){
+        return visitProbeMapper.dayOldVisits(time,assetsId);
+    }
 }

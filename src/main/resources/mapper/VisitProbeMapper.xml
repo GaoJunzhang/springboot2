@@ -11,6 +11,7 @@
         <result column="begin_time" jdbcType="TIMESTAMP" property="beginTime"/>
         <result column="assets_id" jdbcType="INTEGER" property="assetsId"/>
         <result column="end_time" jdbcType="TIMESTAMP" property="endTime"/>
+        <result column="is_old" jdbcType="SMALLINT" property="isOld"/>
     </resultMap>
     <resultMap id="VisitStatisResultMap" type="com.seeyoo.visit.bean.VisitStatisBean">
         <result column="visitDate" jdbcType="DATE" property="visitDate"/>
@@ -30,7 +31,8 @@
         <result column="name" jdbcType="VARCHAR" property="name"/>
         <result column="avCount" jdbcType="BIGINT" property="avCount"/>
     </resultMap>
-    <select id="selectByMacAndTimeAndAssetsId" parameterType="com.seeyoo.visit.model.VisitProbe" resultMap="BaseResultMap">
+    <select id="selectByMacAndTimeAndAssetsId" parameterType="com.seeyoo.visit.model.VisitProbe"
+            resultMap="BaseResultMap">
         select * from visit_probe where 1=1
         <if test="beginTime!=null">
             and begin_time=#{beginTime}
@@ -98,6 +100,11 @@
         AND assets_id =#{assetsId}
         GROUP BY
             t.mac
+    </select>
+    <select id="dayOldVisits" parameterType="com.seeyoo.visit.bean.VisitBean" resultType="java.lang.Integer">
+        select count(id) from visit_probe t
+        where DATE_FORMAT(t.begin_time, '%Y-%m-%d') =#{time}
+        and assets_id =#{assetsId} and is_old=1
     </select>
     <select id="dayVisitCount" parameterType="com.seeyoo.visit.bean.VisitBean" resultMap="VisitStatisResultMap">
         SELECT

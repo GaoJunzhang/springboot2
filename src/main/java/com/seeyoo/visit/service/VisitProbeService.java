@@ -34,4 +34,6 @@ public interface VisitProbeService extends IService<VisitProbe> {
 
     public int countOldByTime(Timestamp start, Timestamp end);
 
+    public int dayOldVisits( String time, Integer assetsId);
+
 }
