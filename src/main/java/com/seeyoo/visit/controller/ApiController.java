@@ -103,6 +103,7 @@ public class ApiController {
                                 visitProbe.setAssetsId(assetsId);
                                 visitProbe.setDb(Integer.parseInt(macObj.get("db") + ""));
                                 visitProbe.setIsOld(isOld);
+                                visitProbe.setTime(new Timestamp(System.currentTimeMillis()));
                                 visitProbeService.save(visitProbe);
                             }else {
                                 if (visitProbe.getDb()<Integer.parseInt(macObj.get("db") + "")){
@@ -111,6 +112,7 @@ public class ApiController {
                                 }
                                 visitProbe.setEndTime(Timestamp.valueOf(macObj.get("end")+""));
                                 visitProbe.setIsOld(isOld);
+                                visitProbe.setTime(new Timestamp(System.currentTimeMillis()));
                                 visitProbeService.updateNotNull(visitProbe);
                             }
                         }

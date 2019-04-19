@@ -1,7 +1,5 @@
 package com.seeyoo.visit.aspect;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.seeyoo.visit.result.ResultVO;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
@@ -41,12 +39,12 @@ public class LogAspect {
                 .append("IP = {" + request.getRemoteAddr() + "},\t")
                 .append("CLASS_METHOD = {" + joinPoint.getSignature().getDeclaringTypeName() + "." + joinPoint.getSignature().getName() + "},\t");
 
-        if(joinPoint.getArgs().length == 0) {
-            requestLog.append("ARGS = {} ");
-        } else {
-            requestLog.append("ARGS = " + new ObjectMapper().setSerializationInclusion(JsonInclude.Include.NON_NULL)
-                    .writeValueAsString(joinPoint.getArgs()[0]) + "");
-        }
+//        if(joinPoint.getArgs().length == 0) {
+//            requestLog.append("ARGS = {} ");
+//        } else {
+//            requestLog.append("ARGS = " + new ObjectMapper().setSerializationInclusion(JsonInclude.Include.NON_NULL)
+//                    .writeValueAsString(joinPoint.getArgs()[0]) + "");
+//        }
 
         logger.info(requestLog.toString());
     }
