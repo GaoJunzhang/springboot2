@@ -86,7 +86,7 @@ public class VisitProbeController {
         tCalendar.setTime(startCalendar.getTime());
         List<VisitRecordBean> visitRecordBeans = new ArrayList<VisitRecordBean>();
         Example example = new Example(VisitProbe.class);
-        example.createCriteria().andBetween("beginTime", Timestamp.valueOf(startDate + " 00:00:00"), Timestamp.valueOf(endDate + " 23:59:59")).andEqualTo("assetsId", assetsId);
+        example.createCriteria().andBetween("endTime", Timestamp.valueOf(startDate + " 00:00:00"), Timestamp.valueOf(endDate + " 23:59:59")).andEqualTo("assetsId", assetsId);
         List<VisitProbe> btVisits = visitProbeService.selectByExample(example);
         PageInfo<VisitStatisBean> pages = visitProbeService.selectByPage(Timestamp.valueOf(startDate + " 00:00:00"), Timestamp.valueOf(endDate + " 23:59:59"), assetsId, page, rows);
         List<VisitStatisBean> visitStatisBeans = pages.getList();
@@ -115,7 +115,7 @@ public class VisitProbeController {
         int vaildCount = 0;
         int passCount = 0;
         for (VisitProbe visitRecord : list) {
-            if (date.equals(StringTools.timeStapm2Str(visitRecord.getBeginTime()))) {
+            if (date.equals(StringTools.timeStapm2Str(visitRecord.getEndTime()))) {
 
                 visitCount++;
                 if (Math.abs(visitRecord.getDb()) >= aDb && Math.abs(visitRecord.getDb()) <= bDb) {

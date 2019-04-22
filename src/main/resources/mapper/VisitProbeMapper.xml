@@ -56,7 +56,7 @@
         calendar
         UNION ALL
         SELECT
-        begin_time
+        end_time
         FROM
         visit_probe
         WHERE 1=1
@@ -81,7 +81,7 @@
         FROM
         visit_probe t
         WHERE
-        DATE_FORMAT(t.begin_time, '%Y-%m-%d') = #{time}
+        DATE_FORMAT(t.end_time, '%Y-%m-%d') = #{time}
         <if test="assetsId!=null and assetsId!=''">
             AND t.assets_id = #{assetsId}
         </if>
@@ -92,34 +92,34 @@
         SELECT
             count(id) AS visitDayCount,
             t.mac,
-            t.begin_time as time
+            t.end_time as time
         FROM
             visit_probe t
         WHERE
-            DATE_FORMAT(t.begin_time, '%Y-%m-%d') =#{time}
+            DATE_FORMAT(t.end_time, '%Y-%m-%d') =#{time}
         AND assets_id =#{assetsId}
         GROUP BY
             t.mac
     </select>
     <select id="dayOldVisits" parameterType="com.seeyoo.visit.bean.VisitBean" resultType="java.lang.Integer">
         select count(id) from visit_probe t
-        where DATE_FORMAT(t.begin_time, '%Y-%m-%d') =#{time}
+        where DATE_FORMAT(t.end_time, '%Y-%m-%d') =#{time}
         and assets_id =#{assetsId} and is_old=1
     </select>
     <select id="dayVisitCount" parameterType="com.seeyoo.visit.bean.VisitBean" resultMap="VisitStatisResultMap">
         SELECT
-            date(t.begin_time) AS visitDate,
+            date(t.end_time) AS visitDate,
             count(id) AS visitCount
         FROM
             visit_probe t
         WHERE
-            (t.begin_time BETWEEN #{start} AND #{end})
+            (t.end_time BETWEEN #{start} AND #{end})
         GROUP BY
             DATE_FORMAT(t.begin_time, '%Y-%m-%d')
     </select>
     <select id="dayVisitVaildCount" parameterType="com.seeyoo.visit.bean.VisitBean" resultMap="VisitStatisResultMap">
       SELECT
-            date(t.begin_time) AS visitDate,
+            date(t.end_time) AS visitDate,
             count(id) AS visitCount
         FROM
             visit_probe t
@@ -128,9 +128,9 @@
                 ABS(t.db) BETWEEN #{sdb}
                 AND #{edb}
             )
-        AND (t.begin_time BETWEEN #{start} AND #{end})
+        AND (t.end_time BETWEEN #{start} AND #{end})
         GROUP BY
-            DATE_FORMAT(t.begin_time, '%Y-%m-%d')
+            DATE_FORMAT(t.end_time, '%Y-%m-%d')
     </select>
 
     <select id="getAllVisitTime" parameterType="com.seeyoo.visit.bean.VisitBean" resultType="java.lang.Integer">
@@ -142,7 +142,7 @@
         FROM
             visit_probe t
         WHERE
-            (t.begin_time BETWEEN #{start} AND #{end})
+            (t.end_time BETWEEN #{start} AND #{end})
         GROUP BY
             t.mac
       ) dep
@@ -151,13 +151,13 @@
         SELECT
             count(id) AS visitDayCount,
             t.mac,
-            t.begin_time as time
+            t.end_time as time
         FROM
             visit_probe t
         WHERE
-            (t.begin_time BETWEEN #{start} AND #{end})
+            (t.end_time BETWEEN #{start} AND #{end})
         GROUP BY
-            t.begin_time,t.mac
+            t.end_time,t.mac
     </select>
     <select id="top10Assets" parameterType="com.seeyoo.visit.bean.VisitBean" resultMap="AssetsResultMap">
         SELECT
@@ -171,7 +171,7 @@
                 FROM
                     visit_probe t
                 WHERE
-                    (t.begin_time BETWEEN #{start} AND #{end})
+                    (t.end_time BETWEEN #{start} AND #{end})
                 GROUP BY
                     t.assets_id
             ) a
@@ -193,7 +193,7 @@
                 FROM
                     visit_probe t
                 WHERE
-                    (t.begin_time BETWEEN #{start} AND #{end})
+                    (t.end_time BETWEEN #{start} AND #{end})
                 AND (
                     ABS(t.db) BETWEEN #{sdb}
                     AND #{edb}
@@ -209,6 +209,6 @@
     </select>
     <select id="countOldByTime" parameterType="com.seeyoo.visit.bean.VisitBean" resultType="java.lang.Integer">
         SELECT count(1) from visit_probe t where t.is_old=1
-        and (t.begin_time BETWEEN #{start} AND #{end})
+        and (t.end_time BETWEEN #{start} AND #{end})
     </select>
 </mapper>
