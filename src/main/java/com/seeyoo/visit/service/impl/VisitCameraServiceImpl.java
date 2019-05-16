@@ -17,15 +17,15 @@ public class VisitCameraServiceImpl extends BaseService<VisitCamera> implements 
     private VisitCameraMapper visitCameraMapper;
 
 
-    public List<VisitCameraBean> dayVisitCount(Timestamp startDate, Timestamp endDate, int assetsId) {
-        return visitCameraMapper.dayVisitCount(startDate, endDate, assetsId);
+    public List<VisitCameraBean> dayVisitCount(Timestamp startDate, Timestamp endDate,int[] idList) {
+        return visitCameraMapper.dayVisitCount(startDate, endDate, idList);
     }
 
-    public int countByAgeBetweenAndStampBetween(Timestamp start, Timestamp end, int startAge, int endAge, int assetsId) {
-        return visitCameraMapper.countByAgeBetweenAndStampBetween(start, end, startAge, endAge, assetsId);
+    public int countByAgeBetweenAndStampBetween(Timestamp start, Timestamp end, int startAge, int endAge,int[] idList) {
+        return visitCameraMapper.countByAgeBetweenAndStampBetween(start, end, startAge, endAge, idList);
     }
 
-    public List<AssetsBean> top10MemberAssets(Timestamp start, Timestamp end) {
-        return visitCameraMapper.top10MemberAssets(start, end);
+    public List<AssetsBean> top10MemberAssets(Timestamp start, Timestamp end,int[] idList) {
+        return visitCameraMapper.top10MemberAssets(start, end,idList);
     }
 }

@@ -29,21 +29,44 @@
         SELECT date(t.stamp) as visitDate ,count(id) as visitCount,t.gender,SUM(t.stay) as stayCount
         from visit_camera t
         where (t.stamp between #{start} and #{end})
-        <if test="assetsId!=null and assetsId!=''">
-            and t.assets_id=#{assetsId}
+        <if test="idList!=null">
+
+            and t.assets_id IN
+            <foreach collection="idList" item="id" index="index"
+                     open="(" close=")" separator=",">
+                #{id}
+            </foreach>
         </if>
         GROUP BY DATE_FORMAT(t.stamp,'%Y-%m-%d'),t.gender
     </select>
     <select id="top10MemberAssets" parameterType="com.seeyoo.visit.bean.VisitBean" resultMap="AssetsResultMap">
         SELECT t1.name,avCount from
-        (SELECT COUNT(id) as avcount,assets_id from visit_camera t where (t.stamp between #{start} and #{end}) GROUP BY t.assets_id) a
+        (SELECT COUNT(id) as avcount,assets_id from visit_camera t where (t.stamp between #{start} and #{end})
+        <if test="idList!=null">
+
+            and t.assets_id IN
+            <foreach collection="idList" item="id" index="index"
+                     open="(" close=")" separator=",">
+                #{id}
+            </foreach>
+        </if>
+         GROUP BY t.assets_id) a
         LEFT JOIN assets t1
         on a.assets_id=t1.id
         order BY a.avcount desc LIMIT 0,10
     </select>
-    <select id="countByAgeBetweenAndStampBetween" parameterType="com.seeyoo.visit.bean.VisitBean" resultType="java.lang.Integer">
+    <select id="countByAgeBetweenAndStampBetween" parameterType="com.seeyoo.visit.bean.VisitBean"
+            resultType="java.lang.Integer">
         SELECT count(t.id)
         from visit_camera t
-        where (t.age BETWEEN #{startAge} and #{endAge}) and (t.stamp BETWEEN #{start} AND #{end}) and t.assets_id=#{assetsId}
+        where (t.age BETWEEN #{startAge} and #{endAge}) and (t.stamp BETWEEN #{start} AND #{end})
+        <if test="idList!=null">
+
+            and t.assets_id IN
+            <foreach collection="idList" item="id" index="index"
+                     open="(" close=")" separator=",">
+                #{id}
+            </foreach>
+        </if>
     </select>
 </mapper>

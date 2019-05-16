@@ -108,44 +108,69 @@
     </select>
     <select id="dayVisitCount" parameterType="com.seeyoo.visit.bean.VisitBean" resultMap="VisitStatisResultMap">
         SELECT
-            date(t.end_time) AS visitDate,
-            count(id) AS visitCount
+        date(t.end_time) AS visitDate,
+        count(id) AS visitCount
         FROM
-            visit_probe t
+        visit_probe t
         WHERE
-            (t.end_time BETWEEN #{start} AND #{end})
+        (t.end_time BETWEEN #{start} AND #{end})
+        <if test="idList!=null">
+
+            and t.assets_id IN
+            <foreach collection="idList" item="id" index="index"
+                     open="(" close=")" separator=",">
+                #{id}
+            </foreach>
+        </if>
+
         GROUP BY
-            DATE_FORMAT(t.begin_time, '%Y-%m-%d')
+        DATE_FORMAT(t.begin_time, '%Y-%m-%d')
     </select>
     <select id="dayVisitVaildCount" parameterType="com.seeyoo.visit.bean.VisitBean" resultMap="VisitStatisResultMap">
-      SELECT
-            date(t.end_time) AS visitDate,
-            count(id) AS visitCount
+        SELECT
+        date(t.end_time) AS visitDate,
+        count(id) AS visitCount
         FROM
-            visit_probe t
+        visit_probe t
         WHERE
-            (
-                ABS(t.db) BETWEEN #{sdb}
-                AND #{edb}
-            )
+        (
+        ABS(t.db) BETWEEN #{sdb}
+        AND #{edb}
+        )
         AND (t.end_time BETWEEN #{start} AND #{end})
+        <if test="idList!=null">
+
+            and t.assets_id IN
+            <foreach collection="idList" item="id" index="index"
+                     open="(" close=")" separator=",">
+                #{id}
+            </foreach>
+        </if>
         GROUP BY
-            DATE_FORMAT(t.end_time, '%Y-%m-%d')
+        DATE_FORMAT(t.end_time, '%Y-%m-%d')
     </select>
 
     <select id="getAllVisitTime" parameterType="com.seeyoo.visit.bean.VisitBean" resultType="java.lang.Integer">
-      SELECT COALESCE(sum(dep.dayTime),0) from (
+        SELECT COALESCE(sum(dep.dayTime),0) from (
         SELECT
-            ROUND(
-                UNIX_TIMESTAMP(t.end_time) - UNIX_TIMESTAMP(t.begin_time)
-            ) as dayTime
+        ROUND(
+        UNIX_TIMESTAMP(t.end_time) - UNIX_TIMESTAMP(t.begin_time)
+        ) as dayTime
         FROM
-            visit_probe t
+        visit_probe t
         WHERE
-            (t.end_time BETWEEN #{start} AND #{end})
+        (t.end_time BETWEEN #{start} AND #{end})
+        <if test="idList!=null">
+
+            and t.assets_id IN
+            <foreach collection="idList" item="id" index="index"
+                     open="(" close=")" separator=",">
+                #{id}
+            </foreach>
+        </if>
         GROUP BY
-            t.mac
-      ) dep
+        t.mac
+        ) dep
     </select>
     <select id="dayVisiters" parameterType="com.seeyoo.visit.bean.VisitBean" resultMap="DayVisitResultMap">
         SELECT
@@ -161,54 +186,78 @@
     </select>
     <select id="top10Assets" parameterType="com.seeyoo.visit.bean.VisitBean" resultMap="AssetsResultMap">
         SELECT
-            t1. NAME,
-            avCount
+        t1. NAME,
+        avCount
         FROM
-            (
-                SELECT
-                    COUNT(id) AS avcount,
-                    assets_id
-                FROM
-                    visit_probe t
-                WHERE
-                    (t.end_time BETWEEN #{start} AND #{end})
-                GROUP BY
-                    t.assets_id
-            ) a
+        (
+        SELECT
+        COUNT(id) AS avcount,
+        assets_id
+        FROM
+        visit_probe t
+        WHERE
+        (t.end_time BETWEEN #{start} AND #{end})
+        <if test="idList!=null">
+
+            and t.assets_id IN
+            <foreach collection="idList" item="id" index="index"
+                     open="(" close=")" separator=",">
+                #{id}
+            </foreach>
+        </if>
+        GROUP BY
+        t.assets_id
+        ) a
         LEFT JOIN assets t1 ON a.assets_id = t1.id
         ORDER BY
-            a.avcount DESC
+        a.avcount DESC
         LIMIT 0,
-         10
+        10
     </select>
     <select id="top10VaildAssets" parameterType="com.seeyoo.visit.bean.VisitBean" resultMap="AssetsResultMap">
         SELECT
-            t1. NAME,
-            avCount
+        t1. NAME,
+        avCount
         FROM
-            (
-                SELECT
-                    COUNT(id) AS avcount,
-                    assets_id
-                FROM
-                    visit_probe t
-                WHERE
-                    (t.end_time BETWEEN #{start} AND #{end})
-                AND (
-                    ABS(t.db) BETWEEN #{sdb}
-                    AND #{edb}
-                )
-                GROUP BY
-                    t.assets_id
-            ) a
+        (
+        SELECT
+        COUNT(id) AS avcount,
+        assets_id
+        FROM
+        visit_probe t
+        WHERE
+        (t.end_time BETWEEN #{start} AND #{end})
+        <if test="idList!=null">
+
+            and t.assets_id IN
+            <foreach collection="idList" item="id" index="index"
+                     open="(" close=")" separator=",">
+                #{id}
+            </foreach>
+        </if>
+        AND (
+        ABS(t.db) BETWEEN #{sdb}
+        AND #{edb}
+        )
+        GROUP BY
+        t.assets_id
+        ) a
         LEFT JOIN assets t1 ON a.assets_id = t1.id
         ORDER BY
-            a.avcount DESC
+        a.avcount DESC
         LIMIT 0,
-         10
+        10
     </select>
     <select id="countOldByTime" parameterType="com.seeyoo.visit.bean.VisitBean" resultType="java.lang.Integer">
         SELECT count(1) from visit_probe t where t.is_old=1
         and (t.end_time BETWEEN #{start} AND #{end})
+        <if test="idList!=null">
+
+            and t.assets_id IN
+            <foreach collection="idList" item="id" index="index"
+                     open="(" close=")" separator=",">
+                #{id}
+            </foreach>
+        </if>
     </select>
 </mapper>

@@ -10,7 +10,7 @@ import java.sql.Timestamp;
 import java.util.List;
 
 public interface VisitCameraMapper extends MyMapper<VisitCamera> {
-    public List<VisitCameraBean> dayVisitCount(@Param("start") Timestamp start, @Param("end") Timestamp end, @Param("assetsId") int assetsId);
-    public List<AssetsBean> top10MemberAssets(@Param("start") Timestamp start,  @Param("end")Timestamp end);
-    public int countByAgeBetweenAndStampBetween( @Param("start")Timestamp start, @Param("end")Timestamp end,@Param("startAge")int startAge,@Param("endAge")int endAge,@Param("assetsId")int assetsId);
+    public List<VisitCameraBean> dayVisitCount(@Param("start") Timestamp start, @Param("end") Timestamp end, @Param("idList") int[] idList);
+    public List<AssetsBean> top10MemberAssets(@Param("start") Timestamp start,  @Param("end")Timestamp end, @Param("idList") int[] idList);
+    public int countByAgeBetweenAndStampBetween( @Param("start")Timestamp start, @Param("end")Timestamp end,@Param("startAge")int startAge,@Param("endAge")int endAge, @Param("idList") int[] idList);
 }

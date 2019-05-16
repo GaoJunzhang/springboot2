@@ -96,12 +96,16 @@ public class AssetsController {
     @RequestMapping(value = "getAssetsByMac",method = RequestMethod.POST,params = "macs")
     @ApiOperation(value = "资产信息")
     @ApiImplicitParam(paramType = "arry",name = "macs",value = "Array",dataType = "Array")
-    public ResultVO getAssetsByMac(@RequestParam("macs") List<String> macs){
+    public ResultVO getAssetsByMac(@RequestParam("macs") List<String> macs,Short type){
         if (macs.size()<=0){
             return ResultVO.getFailed("Terminal'macs is null");
         }
         Example example = new Example(Assets.class);
-        example.createCriteria().andIn("mac",macs);
+        if (type!=null){
+            example.createCriteria().andIn("mac",macs).andEqualTo("type",type);
+        }else {
+            example.createCriteria().andIn("mac",macs);
+        }
         List<Assets> assets = assetsService.selectByExample(example);
         return ResultVO.getSuccess("success",assets);
     }

@@ -11,7 +11,7 @@ import java.sql.Timestamp;
 import java.util.List;
 
 public interface VisitProbeService extends IService<VisitProbe> {
-    public VisitProbe selectByMacAndTimeAndAssetsId(String mac, Timestamp beginTime,Integer assetsId);
+    public VisitProbe selectByMacAndTimeAndAssetsId(String mac, Timestamp beginTime, Integer assetsId);
 
     public PageInfo<VisitStatisBean> selectByPage(Timestamp start, Timestamp end, Integer assetsId, int page, int size);
 
@@ -20,20 +20,20 @@ public interface VisitProbeService extends IService<VisitProbe> {
     public List<DayVisitBean> dayVisits(String time, Integer assetsId);
 
 
-    public List<VisitStatisBean> dayVisitCount(Timestamp start, Timestamp end);
+    public List<VisitStatisBean> dayVisitCount(Timestamp start, Timestamp end, int[] idList);
 
-    public List<VisitStatisBean> dayVisitVaildCount(Timestamp start, Timestamp end, int sdb, int edb);
+    public List<VisitStatisBean> dayVisitVaildCount(Timestamp start, Timestamp end, int sdb, int edb, int[] idList);
 
-    public int getAllVisitTime(Timestamp start, Timestamp end);
+    public int getAllVisitTime(Timestamp start, Timestamp end, int[] idList);
 
     public List<DayVisitBean> dayVisiters(Timestamp start, Timestamp end);
 
-    public List<AssetsBean> top10Assets(Timestamp start, Timestamp end);
+    public List<AssetsBean> top10Assets(Timestamp start, Timestamp end, int[] idList);
 
-    public List<AssetsBean> top10VaildAssets(Timestamp start, Timestamp end, int sdb, int edb);
+    public List<AssetsBean> top10VaildAssets(Timestamp start, Timestamp end, int sdb, int edb, int[] idList);
 
-    public int countOldByTime(Timestamp start, Timestamp end);
+    public int countOldByTime(Timestamp start, Timestamp end, int[] idList);
 
-    public int dayOldVisits( String time, Integer assetsId);
+    public int dayOldVisits(String time, Integer assetsId);
 
 }

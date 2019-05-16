@@ -8,9 +8,9 @@ import java.sql.Timestamp;
 import java.util.List;
 
 public interface VisitCameraService extends IService<VisitCamera> {
-    public List<VisitCameraBean> dayVisitCount(Timestamp startDate, Timestamp endDate, int assetsId);
+    public List<VisitCameraBean> dayVisitCount(Timestamp startDate, Timestamp endDate, int[] idList);
 
-    public int countByAgeBetweenAndStampBetween(Timestamp start, Timestamp end, int startAge, int endAge, int assetsId);
+    public int countByAgeBetweenAndStampBetween(Timestamp start, Timestamp end, int startAge, int endAge, int[] idList);
 
-    public List<AssetsBean> top10MemberAssets(Timestamp start, Timestamp end);
+    public List<AssetsBean> top10MemberAssets(Timestamp start, Timestamp end,int[] idList);
 }
