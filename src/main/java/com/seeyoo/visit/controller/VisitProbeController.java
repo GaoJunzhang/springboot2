@@ -13,12 +13,11 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import tk.mybatis.mapper.entity.Example;
 
 import java.sql.Timestamp;
@@ -332,8 +331,8 @@ public class VisitProbeController {
             visitRecordBeans.add(visitRecordBean);
             startCalendar.add(Calendar.DATE, 1);
         }
-        int visitAllTime = visitProbeService.getAllVisitTime(Timestamp.valueOf(startDate + " 00:00:00"), Timestamp.valueOf(endDate + " 23:59:59"),macs);//所有访问时间
-        int oldCustomer = visitProbeService.countOldByTime(Timestamp.valueOf(startDate + " 00:00:00"), Timestamp.valueOf(endDate + " 23:59:59"),macs);//时间范围内访问的老客户
+        int visitAllTime = visitProbeService.getAllVisitTime(Timestamp.valueOf(startDate + " 00:00:00"), Timestamp.valueOf(endDate + " 23:59:59"), macs);//所有访问时间
+        int oldCustomer = visitProbeService.countOldByTime(Timestamp.valueOf(startDate + " 00:00:00"), Timestamp.valueOf(endDate + " 23:59:59"), macs);//时间范围内访问的老客户
         map.put("visitAllTime", visitAllTime);
         map.put("list", visitRecordBeans);
         map.put("oldCustomer", oldCustomer);
