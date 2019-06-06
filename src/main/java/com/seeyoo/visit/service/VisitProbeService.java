@@ -20,19 +20,19 @@ public interface VisitProbeService extends IService<VisitProbe> {
     public List<DayVisitBean> dayVisits(String time, Integer assetsId);
 
 
-    public List<VisitStatisBean> dayVisitCount(Timestamp start, Timestamp end, int[] idList);
+    public List<VisitStatisBean> dayVisitCount(Timestamp start, Timestamp end, int[] idList,String code);
 
-    public List<VisitStatisBean> dayVisitVaildCount(Timestamp start, Timestamp end, int sdb, int edb, int[] idList);
+    public List<VisitStatisBean> dayVisitVaildCount(Timestamp start, Timestamp end, int sdb, int edb, int[] idList,String code);
 
-    public int getAllVisitTime(Timestamp start, Timestamp end, int[] idList);
+    public int getAllVisitTime(Timestamp start, Timestamp end, int[] idList,String code);
 
     public List<DayVisitBean> dayVisiters(Timestamp start, Timestamp end);
 
-    public List<AssetsBean> top10Assets(Timestamp start, Timestamp end, int[] idList);
+    public List<AssetsBean> top10Assets(Timestamp start, Timestamp end, int[] idList,String code);
 
-    public List<AssetsBean> top10VaildAssets(Timestamp start, Timestamp end, int sdb, int edb, int[] idList);
+    public List<AssetsBean> top10VaildAssets(Timestamp start, Timestamp end, int sdb, int edb, int[] idList,String code);
 
-    public int countOldByTime(Timestamp start, Timestamp end, int[] idList);
+    public int countOldByTime(Timestamp start, Timestamp end, int[] idList,String code);
 
     public int dayOldVisits(String time, Integer assetsId);
 

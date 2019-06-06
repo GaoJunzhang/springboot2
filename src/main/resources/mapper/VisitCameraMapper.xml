@@ -37,6 +37,11 @@
                 #{id}
             </foreach>
         </if>
+        <if test="code!=null and code!=''">
+            and exists (
+            select 1 from assets t1 where t1.id=t.assets_id and t1.tgroup_code like CONCAT(#{code},'%')
+            )
+        </if>
         GROUP BY DATE_FORMAT(t.stamp,'%Y-%m-%d'),t.gender
     </select>
     <select id="top10MemberAssets" parameterType="com.seeyoo.visit.bean.VisitBean" resultMap="AssetsResultMap">
@@ -49,6 +54,11 @@
                      open="(" close=")" separator=",">
                 #{id}
             </foreach>
+        </if>
+        <if test="code!=null and code!=''">
+            and exists (
+            select 1 from assets t1 where t1.id=t.assets_id and t1.tgroup_code like CONCAT(#{code},'%')
+            )
         </if>
          GROUP BY t.assets_id) a
         LEFT JOIN assets t1
@@ -67,6 +77,11 @@
                      open="(" close=")" separator=",">
                 #{id}
             </foreach>
+        </if>
+        <if test="code!=null and code!=''">
+            and exists (
+            select 1 from assets t1 where t1.id=t.assets_id and t1.tgroup_code like CONCAT(#{code},'%')
+            )
         </if>
     </select>
 </mapper>

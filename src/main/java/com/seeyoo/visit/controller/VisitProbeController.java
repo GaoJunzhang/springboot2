@@ -285,7 +285,7 @@ public class VisitProbeController {
     })
     public Map<String, Object> getAllVisitStatis(@RequestParam(name = "startDate", required = false) String startDate,
                                                  @RequestParam(name = "endDate", required = false) String endDate,
-                                                 int[] macs) {
+                                                 int[] macs,String code) {
         Map<String, Object> map = new HashMap<String, Object>();
         if (StringTools.isEmptyString(startDate)) {
             Calendar calendar = Calendar.getInstance();
@@ -304,12 +304,12 @@ public class VisitProbeController {
         tCalendar.setTime(startCalendar.getTime());
         List<VisitRecordBean> visitRecordBeans = new ArrayList<VisitRecordBean>();
         Constant constant = constantService.selectByKey(1);
-        List<VisitStatisBean> visitStatisBeans = visitProbeService.dayVisitCount(Timestamp.valueOf(startDate + " 00:00:00"), Timestamp.valueOf(endDate + " 23:59:59"), macs);
+        List<VisitStatisBean> visitStatisBeans = visitProbeService.dayVisitCount(Timestamp.valueOf(startDate + " 00:00:00"), Timestamp.valueOf(endDate + " 23:59:59"), macs,code);
         List<VisitStatisBean> visitVaildStatisBeans = null;
         if (constant != null) {
-            visitVaildStatisBeans = visitProbeService.dayVisitVaildCount(Timestamp.valueOf(startDate + " 00:00:00"), Timestamp.valueOf(endDate + " 23:59:59"), constant.getVaildAdb(), constant.getVaildeBdb(), macs);
+            visitVaildStatisBeans = visitProbeService.dayVisitVaildCount(Timestamp.valueOf(startDate + " 00:00:00"), Timestamp.valueOf(endDate + " 23:59:59"), constant.getVaildAdb(), constant.getVaildeBdb(), macs,code);
         } else {
-            visitVaildStatisBeans = visitProbeService.dayVisitVaildCount(Timestamp.valueOf(startDate + " 00:00:00"), Timestamp.valueOf(endDate + " 23:59:59"), Adb, Bdb, macs);
+            visitVaildStatisBeans = visitProbeService.dayVisitVaildCount(Timestamp.valueOf(startDate + " 00:00:00"), Timestamp.valueOf(endDate + " 23:59:59"), Adb, Bdb, macs,code);
         }
         while (startCalendar.compareTo(endCalendar) <= 0) {
             VisitRecordBean visitRecordBean = new VisitRecordBean();
@@ -331,8 +331,8 @@ public class VisitProbeController {
             visitRecordBeans.add(visitRecordBean);
             startCalendar.add(Calendar.DATE, 1);
         }
-        int visitAllTime = visitProbeService.getAllVisitTime(Timestamp.valueOf(startDate + " 00:00:00"), Timestamp.valueOf(endDate + " 23:59:59"), macs);//所有访问时间
-        int oldCustomer = visitProbeService.countOldByTime(Timestamp.valueOf(startDate + " 00:00:00"), Timestamp.valueOf(endDate + " 23:59:59"), macs);//时间范围内访问的老客户
+        int visitAllTime = visitProbeService.getAllVisitTime(Timestamp.valueOf(startDate + " 00:00:00"), Timestamp.valueOf(endDate + " 23:59:59"), macs,code);//所有访问时间
+        int oldCustomer = visitProbeService.countOldByTime(Timestamp.valueOf(startDate + " 00:00:00"), Timestamp.valueOf(endDate + " 23:59:59"), macs,code);//时间范围内访问的老客户
         map.put("visitAllTime", visitAllTime);
         map.put("list", visitRecordBeans);
         map.put("oldCustomer", oldCustomer);
@@ -346,7 +346,7 @@ public class VisitProbeController {
             @ApiImplicitParam(paramType = "query", name = "endDate", value = "endDate", dataType = "String"),
             @ApiImplicitParam(paramType = "query", name = "type", value = "0 or 1", dataType = "int"),
     })
-    public Map<String, Object> getTop10Assets(String startDate, String endDate, @RequestParam(name = "type", defaultValue = "0", required = false) int type, int[] macs) {
+    public Map<String, Object> getTop10Assets(String startDate, String endDate, @RequestParam(name = "type", defaultValue = "0", required = false) int type, int[] macs,String code) {
         Map<String, Object> map = new HashMap<String, Object>();
         if (StringTools.isEmptyString(startDate)) {
             Calendar calendar = Calendar.getInstance();
@@ -365,14 +365,14 @@ public class VisitProbeController {
         tCalendar.setTime(startCalendar.getTime());
         List<AssetsBean> assetsBeans = null;
         if (type == 1) {
-            assetsBeans = visitProbeService.top10Assets(Timestamp.valueOf(startDate + " 00:00:00"), Timestamp.valueOf(endDate + " 23:59:59"), macs);
+            assetsBeans = visitProbeService.top10Assets(Timestamp.valueOf(startDate + " 00:00:00"), Timestamp.valueOf(endDate + " 23:59:59"), macs,code);
         } else {
             Constant constant = constantService.selectByKey(1);
             if (constant != null) {
-                assetsBeans = visitProbeService.top10VaildAssets(Timestamp.valueOf(startDate + " 00:00:00"), Timestamp.valueOf(endDate + " 23:59:59"), constant.getVaildAdb(), constant.getVaildeBdb(), macs);
+                assetsBeans = visitProbeService.top10VaildAssets(Timestamp.valueOf(startDate + " 00:00:00"), Timestamp.valueOf(endDate + " 23:59:59"), constant.getVaildAdb(), constant.getVaildeBdb(), macs,code);
             } else {
 
-                assetsBeans = visitProbeService.top10VaildAssets(Timestamp.valueOf(startDate + " 00:00:00"), Timestamp.valueOf(endDate + " 23:59:59"), Adb, Bdb, macs);
+                assetsBeans = visitProbeService.top10VaildAssets(Timestamp.valueOf(startDate + " 00:00:00"), Timestamp.valueOf(endDate + " 23:59:59"), Adb, Bdb, macs,code);
             }
         }
         map.put("rows", assetsBeans);

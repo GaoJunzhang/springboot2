@@ -20,21 +20,21 @@ public interface VisitProbeMapper extends MyMapper<VisitProbe> {
 
     public List<DayVisitBean> dayVisits(@Param("time") String time, @Param("assetsId") Integer assetsId);
 
-    public List<VisitStatisBean> dayVisitCount(@Param("start") Timestamp start, @Param("end") Timestamp end, @Param("idList") int[] idList);
+    public List<VisitStatisBean> dayVisitCount(@Param("start") Timestamp start, @Param("end") Timestamp end, @Param("idList") int[] idList,@Param("code") String code);
 
 //    public List<DayVisitBean> dayVisits(String time, int assetsId);
 
-    public List<VisitStatisBean> dayVisitVaildCount(@Param("start") Timestamp start, @Param("end") Timestamp end, @Param("sdb") int sdb, @Param("edb") int edb, @Param("idList") int[] idList);
+    public List<VisitStatisBean> dayVisitVaildCount(@Param("start") Timestamp start, @Param("end") Timestamp end, @Param("sdb") int sdb, @Param("edb") int edb, @Param("idList") int[] idList,@Param("code") String code);
 
-    public int getAllVisitTime(@Param("start") Timestamp start, @Param("end") Timestamp end, @Param("idList") int[] idList);
+    public int getAllVisitTime(@Param("start") Timestamp start, @Param("end") Timestamp end, @Param("idList") int[] idList,@Param("code") String code);
 
     public List<DayVisitBean> dayVisiters(@Param("start") Timestamp start, @Param("end") Timestamp end);
 
-    public List<AssetsBean> top10Assets(@Param("start") Timestamp start, @Param("end") Timestamp end, @Param("idList") int[] idList);
+    public List<AssetsBean> top10Assets(@Param("start") Timestamp start, @Param("end") Timestamp end, @Param("idList") int[] idList,@Param("code") String code);
 
-    public List<AssetsBean> top10VaildAssets(@Param("start") Timestamp start, @Param("end") Timestamp end, @Param("sdb") int sdb, @Param("edb") int edb, @Param("idList") int[] idList);
+    public List<AssetsBean> top10VaildAssets(@Param("start") Timestamp start, @Param("end") Timestamp end, @Param("sdb") int sdb, @Param("edb") int edb, @Param("idList") int[] idList,@Param("code") String code);
 
-    public int countOldByTime(@Param("start") Timestamp start, @Param("end") Timestamp end, @Param("idList") int[] idList);
+    public int countOldByTime(@Param("start") Timestamp start, @Param("end") Timestamp end, @Param("idList") int[] idList,@Param("code") String code);
 
     public int dayOldVisits(@Param("time") String time, @Param("assetsId") Integer assetsId);
 }

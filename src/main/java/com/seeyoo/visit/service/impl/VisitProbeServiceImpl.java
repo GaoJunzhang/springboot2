@@ -38,32 +38,32 @@ public class VisitProbeServiceImpl extends BaseService<VisitProbe> implements Vi
         return visitProbeMapper.dayVisits(time, assetsId);
     }
 
-    public List<VisitStatisBean> dayVisitCount(Timestamp start, Timestamp end, int[] idList) {
-        return visitProbeMapper.dayVisitCount(start, end, idList);
+    public List<VisitStatisBean> dayVisitCount(Timestamp start, Timestamp end, int[] idList,String code) {
+        return visitProbeMapper.dayVisitCount(start, end, idList,code);
     }
 
-    public List<VisitStatisBean> dayVisitVaildCount(Timestamp start, Timestamp end, int sdb, int edb, int[] idList) {
-        return visitProbeMapper.dayVisitVaildCount(start, end, sdb, edb, idList);
+    public List<VisitStatisBean> dayVisitVaildCount(Timestamp start, Timestamp end, int sdb, int edb, int[] idList,String code) {
+        return visitProbeMapper.dayVisitVaildCount(start, end, sdb, edb, idList,code);
     }
 
-    public int getAllVisitTime(Timestamp start, Timestamp end, int[] idList) {
-        return visitProbeMapper.getAllVisitTime(start, end,idList);
+    public int getAllVisitTime(Timestamp start, Timestamp end, int[] idList,String code) {
+        return visitProbeMapper.getAllVisitTime(start, end,idList,code);
     }
 
     public List<DayVisitBean> dayVisiters(Timestamp start, Timestamp end) {
         return visitProbeMapper.dayVisiters(start, end);
     }
 
-    public List<AssetsBean> top10Assets(Timestamp start, Timestamp end, int[] idList) {
-        return visitProbeMapper.top10Assets(start, end, idList);
+    public List<AssetsBean> top10Assets(Timestamp start, Timestamp end, int[] idList,String code) {
+        return visitProbeMapper.top10Assets(start, end, idList,code);
     }
 
-    public List<AssetsBean> top10VaildAssets(Timestamp start, Timestamp end, int sdb, int edb, int[] idList) {
-        return visitProbeMapper.top10VaildAssets(start, end, sdb, edb, idList);
+    public List<AssetsBean> top10VaildAssets(Timestamp start, Timestamp end, int sdb, int edb, int[] idList,String code) {
+        return visitProbeMapper.top10VaildAssets(start, end, sdb, edb, idList,code);
     }
 
-    public int countOldByTime(Timestamp start, Timestamp end, int[] idList) {
-        return visitProbeMapper.countOldByTime(start, end,idList);
+    public int countOldByTime(Timestamp start, Timestamp end, int[] idList,String code) {
+        return visitProbeMapper.countOldByTime(start, end,idList,code);
     }
 
     public int dayOldVisits(String time, Integer assetsId) {

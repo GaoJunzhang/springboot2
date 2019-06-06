@@ -32,7 +32,7 @@ public class VisitCameraController {
             @ApiImplicitParam(paramType = "query", name = "startDate", value = "startDate", dataType = "String"),
             @ApiImplicitParam(paramType = "query", name = "endDate", value = "endDate", dataType = "String"),
     })
-    public Map<String, Object> getCameraStatis(String startDate, String endDate, int[] macs) {
+    public Map<String, Object> getCameraStatis(String startDate, String endDate, int[] macs,String code) {
         Map<String, Object> map = new HashMap<String, Object>();
         if (StringTools.isEmptyString(startDate)) {
             Calendar calendar = Calendar.getInstance();
@@ -49,11 +49,11 @@ public class VisitCameraController {
         endCalendar.setTime(StringTools.stringToDate(endDate));
         Calendar tCalendar = Calendar.getInstance();
         tCalendar.setTime(startCalendar.getTime());
-        List<VisitCameraBean> visitCameraBeans = visitCameraService.dayVisitCount(Timestamp.valueOf(startDate + " 00:00:00"), Timestamp.valueOf(endDate + " 23:59:59"),macs);
-        int youngCount = visitCameraService.countByAgeBetweenAndStampBetween(Timestamp.valueOf(startDate + " 00:00:00"), Timestamp.valueOf(endDate + " 23:59:59"),0,18,macs);
-        int bigYoungCount = visitCameraService.countByAgeBetweenAndStampBetween(Timestamp.valueOf(startDate + " 00:00:00"), Timestamp.valueOf(endDate + " 23:59:59"),19,35,macs);
-        int midlifecount = visitCameraService.countByAgeBetweenAndStampBetween(Timestamp.valueOf(startDate + " 00:00:00"), Timestamp.valueOf(endDate + " 23:59:59"),36,60,macs);
-        int oldAgeCount = visitCameraService.countByAgeBetweenAndStampBetween(Timestamp.valueOf(startDate + " 00:00:00"), Timestamp.valueOf(endDate + " 23:59:59"),61,200,macs);
+        List<VisitCameraBean> visitCameraBeans = visitCameraService.dayVisitCount(Timestamp.valueOf(startDate + " 00:00:00"), Timestamp.valueOf(endDate + " 23:59:59"),macs,code);
+        int youngCount = visitCameraService.countByAgeBetweenAndStampBetween(Timestamp.valueOf(startDate + " 00:00:00"), Timestamp.valueOf(endDate + " 23:59:59"),0,18,macs,code);
+        int bigYoungCount = visitCameraService.countByAgeBetweenAndStampBetween(Timestamp.valueOf(startDate + " 00:00:00"), Timestamp.valueOf(endDate + " 23:59:59"),19,35,macs,code);
+        int midlifecount = visitCameraService.countByAgeBetweenAndStampBetween(Timestamp.valueOf(startDate + " 00:00:00"), Timestamp.valueOf(endDate + " 23:59:59"),36,60,macs,code);
+        int oldAgeCount = visitCameraService.countByAgeBetweenAndStampBetween(Timestamp.valueOf(startDate + " 00:00:00"), Timestamp.valueOf(endDate + " 23:59:59"),61,200,macs,code);
         int betweenDays = (int)((endCalendar.getTime().getTime() - startCalendar.getTime().getTime()) / (1000 * 60 * 60 *24));
         int[] maleArr = new int[betweenDays+1];
         int[] femaleArr = new int[betweenDays+1];
@@ -120,7 +120,7 @@ public class VisitCameraController {
             @ApiImplicitParam(paramType = "query", name = "endDate", value = "endDate", dataType = "String"),
             @ApiImplicitParam(paramType = "query", name = "type", value = "0 or 1", dataType = "int"),
     })
-    public Map<String,Object> top10MemberAssets(String startDate, String endDate,int[] macs){
+    public Map<String,Object> top10MemberAssets(String startDate, String endDate,int[] macs,String code){
         Map<String, Object> map = new HashMap<String, Object>();
         if (StringTools.isEmptyString(startDate)) {
             Calendar calendar = Calendar.getInstance();
@@ -137,7 +137,7 @@ public class VisitCameraController {
         endCalendar.setTime(StringTools.stringToDate(endDate));
         Calendar tCalendar = Calendar.getInstance();
         tCalendar.setTime(startCalendar.getTime());
-        List<AssetsBean> assetsBeans = visitCameraService.top10MemberAssets(Timestamp.valueOf(startDate + " 00:00:00"), Timestamp.valueOf(endDate + " 23:59:59"),macs);
+        List<AssetsBean> assetsBeans = visitCameraService.top10MemberAssets(Timestamp.valueOf(startDate + " 00:00:00"), Timestamp.valueOf(endDate + " 23:59:59"),macs,code);
         map.put("rows",assetsBeans);
         map.put("total",assetsBeans.size());
         return map;

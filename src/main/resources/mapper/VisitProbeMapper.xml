@@ -122,7 +122,11 @@
                 #{id}
             </foreach>
         </if>
-
+        <if test="code!=null and code!=''">
+            and exists (
+            select 1 from assets t1 where t1.id=t.assets_id and t1.tgroup_code like CONCAT(#{code},'%')
+            )
+        </if>
         GROUP BY
         DATE_FORMAT(t.begin_time, '%Y-%m-%d')
     </select>
@@ -146,6 +150,11 @@
                 #{id}
             </foreach>
         </if>
+        <if test="code!=null and code!=''">
+            and exists (
+            select 1 from assets t1 where t1.id=t.assets_id and t1.tgroup_code like CONCAT(#{code},'%')
+            )
+        </if>
         GROUP BY
         DATE_FORMAT(t.end_time, '%Y-%m-%d')
     </select>
@@ -167,6 +176,11 @@
                      open="(" close=")" separator=",">
                 #{id}
             </foreach>
+        </if>
+        <if test="code!=null and code!=''">
+            and exists (
+            select 1 from assets t1 where t1.id=t.assets_id and t1.tgroup_code like CONCAT(#{code},'%')
+            )
         </if>
         GROUP BY
         t.mac
@@ -205,6 +219,11 @@
                 #{id}
             </foreach>
         </if>
+        <if test="code!=null and code!=''">
+            and exists (
+            select 1 from assets tg where tg.id=t.assets_id and tg.tgroup_code like CONCAT(#{code},'%')
+            )
+        </if>
         GROUP BY
         t.assets_id
         ) a
@@ -235,6 +254,11 @@
                 #{id}
             </foreach>
         </if>
+        <if test="code!=null and code!=''">
+            and exists (
+            select 1 from assets tg where tg.id=t.assets_id and tg.tgroup_code like CONCAT(#{code},'%')
+            )
+        </if>
         AND (
         ABS(t.db) BETWEEN #{sdb}
         AND #{edb}
@@ -258,6 +282,11 @@
                      open="(" close=")" separator=",">
                 #{id}
             </foreach>
+        </if>
+        <if test="code!=null and code!=''">
+            and exists (
+            select 1 from assets t1 where t1.id=t.assets_id and t1.tgroup_code like CONCAT(#{code},'%')
+            )
         </if>
     </select>
 </mapper>
