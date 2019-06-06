@@ -10,6 +10,7 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -72,12 +73,12 @@ public class AssetsController {
             example.createCriteria().andIsNull("tgroupId");
             List<Assets> list = assetsService.selectByExample(example);
             List<Assets> list1 = new ArrayList<Assets>(list.size());
-            Map<String,TerminalBean> map = new HashMap<String, TerminalBean>();
-            for (TerminalBean terminalBean : tlist){
-                map.put(terminalBean.getMac(),terminalBean);
+            Map<String, TerminalBean> map = new HashMap<String, TerminalBean>();
+            for (TerminalBean terminalBean : tlist) {
+                map.put(terminalBean.getMac(), terminalBean);
             }
             for (Assets assets : list) {
-                if (map.containsKey(assets.getMac())){
+                if (map.containsKey(assets.getMac())) {
                     Assets assets1 = new Assets();
                     assets1.setTgroupId(map.get(assets.getMac()).getTgroupId());
                     assets1.setMac(assets.getMac());
@@ -93,20 +94,28 @@ public class AssetsController {
         return ResultVO.getSuccess("success");
     }
 
-    @RequestMapping(value = "getAssetsByMac",method = RequestMethod.POST,params = "macs")
+    @RequestMapping(value = "getAssetsByMac", method = RequestMethod.POST, params = "codes")
     @ApiOperation(value = "资产信息")
-    @ApiImplicitParam(paramType = "arry",name = "macs",value = "Array",dataType = "Array")
-    public ResultVO getAssetsByMac(@RequestParam("macs") List<String> macs,Short type){
+    @ApiImplicitParam(paramType = "arry", name = "codes", value = "Array", dataType = "Array")
+    public ResultVO getAssetsByMac(@RequestParam("codes") List<String> codes, Short type,String name) {
 
         Example example = new Example(Assets.class);
         Example.Criteria criteria = example.createCriteria();
-        if (macs.size()>0){
+/*        if (macs.size()>0){
             criteria.andIn("mac",macs);
+        }*/
+        if (codes.size() > 0) {
+            for (String str:codes){
+                criteria.andLike("tgroupCode",str+"%");
+            }
         }
-        if (type!=null){
-            criteria.andEqualTo("type",type);
+        if (type != null) {
+            criteria.andEqualTo("type", type);
+        }
+        if (!StringUtils.isEmpty(name)){
+            criteria.andLike("terminalName","%"+name+"%");
         }
         List<Assets> assets = assetsService.selectByExample(example);
-        return ResultVO.getSuccess("success",assets);
+        return ResultVO.getSuccess("success", assets);
     }
 }

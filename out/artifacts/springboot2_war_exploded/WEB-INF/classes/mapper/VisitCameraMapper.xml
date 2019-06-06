@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.seeyoo.visit.mapper.VisitCameraMapper">
+    <resultMap id="BaseResultMap" type="com.seeyoo.visit.model.VisitCamera">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <result column="id" jdbcType="BIGINT" property="id"/>
+        <result column="age" jdbcType="INTEGER" property="age"/>
+        <result column="gender" jdbcType="SMALLINT" property="gender"/>
+        <result column="beauty" jdbcType="INTEGER" property="beauty"/>
+        <result column="stay" jdbcType="INTEGER" property="stay"/>
+        <result column="stamp" jdbcType="TIMESTAMP" property="stamp"/>
+        <result column="time" jdbcType="TIMESTAMP" property="time"/>
+        <result column="assets_id" jdbcType="INTEGER" property="assetsId"/>
+        <result column="visit_id" jdbcType="BIGINT" property="visitId"/>
+    </resultMap>
+    <resultMap id="DayVisitResultMap" type="com.seeyoo.visit.bean.VisitCameraBean">
+        <result column="visitDate" jdbcType="TIMESTAMP" property="visitDate"/>
+        <result column="visitCount" jdbcType="INTEGER" property="visitCount"/>
+        <result column="gender" jdbcType="SMALLINT" property="gender"/>
+        <result column="stayCount" jdbcType="INTEGER" property="stayCount"/>
+    </resultMap>
+    <resultMap id="AssetsResultMap" type="com.seeyoo.visit.bean.AssetsBean">
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="avCount" jdbcType="BIGINT" property="avCount"/>
+    </resultMap>
+    <select id="dayVisitCount" parameterType="com.seeyoo.visit.bean.VisitBean" resultMap="DayVisitResultMap">
+        SELECT date(t.stamp) as visitDate ,count(id) as visitCount,t.gender,SUM(t.stay) as stayCount
+        from visit_camera t
+        where (t.stamp between #{start} and #{end})
+        <if test="idList!=null">
+
+            and t.assets_id IN
+            <foreach collection="idList" item="id" index="index"
+                     open="(" close=")" separator=",">
+                #{id}
+            </foreach>
+        </if>
+        GROUP BY DATE_FORMAT(t.stamp,'%Y-%m-%d'),t.gender
+    </select>
+    <select id="top10MemberAssets" parameterType="com.seeyoo.visit.bean.VisitBean" resultMap="AssetsResultMap">
+        SELECT t1.name,avCount from
+        (SELECT COUNT(id) as avcount,assets_id from visit_camera t where (t.stamp between #{start} and #{end})
+        <if test="idList!=null">
+
+            and t.assets_id IN
+            <foreach collection="idList" item="id" index="index"
+                     open="(" close=")" separator=",">
+                #{id}
+            </foreach>
+        </if>
+         GROUP BY t.assets_id) a
+        LEFT JOIN assets t1
+        on a.assets_id=t1.id
+        order BY a.avcount desc LIMIT 0,10
+    </select>
+    <select id="countByAgeBetweenAndStampBetween" parameterType="com.seeyoo.visit.bean.VisitBean"
+            resultType="java.lang.Integer">
+        SELECT count(t.id)
+        from visit_camera t
+        where (t.age BETWEEN #{startAge} and #{endAge}) and (t.stamp BETWEEN #{start} AND #{end})
+        <if test="idList!=null">
+
+            and t.assets_id IN
+            <foreach collection="idList" item="id" index="index"
+                     open="(" close=")" separator=",">
+                #{id}
+            </foreach>
+        </if>
+    </select>
+</mapper>

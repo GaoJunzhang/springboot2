@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.seeyoo.visit.mapper2.TgroupMapper">
+  <resultMap id="BaseResultMap" type="com.seeyoo.visit.model.Tgroup">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="pre_id" jdbcType="BIGINT" property="preId" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="lev" jdbcType="INTEGER" property="lev" />
+    <result column="code" jdbcType="VARCHAR" property="code" />
+    <result column="lng" jdbcType="VARCHAR" property="lng" />
+    <result column="lat" jdbcType="VARCHAR" property="lat" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>
+  <select id="codeByMac" resultType="com.seeyoo.visit.bean.TgroupBean" parameterType="java.lang.String">
+    SELECT tg.id,t.name,tg.code from tgroup tg,terminal t where tg.id=t.tgroup_id and t.mac=#{mac}
+  </select>
+</mapper>

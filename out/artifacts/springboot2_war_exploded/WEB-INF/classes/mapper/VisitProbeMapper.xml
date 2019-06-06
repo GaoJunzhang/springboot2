@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.seeyoo.visit.mapper.VisitProbeMapper">
+    <resultMap id="BaseResultMap" type="com.seeyoo.visit.model.VisitProbe">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <result column="id" jdbcType="BIGINT" property="id"/>
+        <result column="mac" jdbcType="VARCHAR" property="mac"/>
+        <result column="db" jdbcType="INTEGER" property="db"/>
+        <result column="begin_time" jdbcType="TIMESTAMP" property="beginTime"/>
+        <result column="assets_id" jdbcType="INTEGER" property="assetsId"/>
+        <result column="end_time" jdbcType="TIMESTAMP" property="endTime"/>
+        <result column="is_old" jdbcType="SMALLINT" property="isOld"/>
+    </resultMap>
+    <resultMap id="VisitStatisResultMap" type="com.seeyoo.visit.bean.VisitStatisBean">
+        <result column="visitDate" jdbcType="DATE" property="visitDate"/>
+        <result column="visitCount" jdbcType="INTEGER" property="visitCount"/>
+    </resultMap>
+    <resultMap id="VisitTimeResultMap" type="com.seeyoo.visit.bean.VisitTimeBean">
+        <result column="visitTime" jdbcType="INTEGER" property="visitTime"/>
+        <result column="mac" jdbcType="VARCHAR" property="mac"/>
+        <result column="visitCount" jdbcType="INTEGER" property="visitCount"/>
+    </resultMap>
+    <resultMap id="DayVisitResultMap" type="com.seeyoo.visit.bean.DayVisitBean">
+        <result column="visitDayCount" jdbcType="INTEGER" property="visitDayCount"/>
+        <result column="mac" jdbcType="VARCHAR" property="mac"/>
+        <result column="time" jdbcType="TIMESTAMP" property="time"/>
+    </resultMap>
+    <resultMap id="AssetsResultMap" type="com.seeyoo.visit.bean.AssetsBean">
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="avCount" jdbcType="BIGINT" property="avCount"/>
+    </resultMap>
+    <select id="selectByMacAndTimeAndAssetsId" parameterType="com.seeyoo.visit.model.VisitProbe"
+            resultMap="BaseResultMap">
+        select * from visit_probe where 1=1
+        <if test="beginTime!=null">
+            and begin_time=#{beginTime}
+        </if>
+        <if test="mac!=null and mac!=''">
+            and mac=#{mac}
+        </if>
+        <if test="assetsId!=null">
+            and assets_id=#{assetsId}
+        </if>
+    </select>
+    <select id="DailysByPage" parameterType="com.seeyoo.visit.bean.VisitBean" resultMap="VisitStatisResultMap">
+        SELECT
+        date(dday) AS visitDate,
+        count(*) - 1 AS visitCount
+        FROM
+        (
+        SELECT
+        datelist AS dday
+        FROM
+        calendar
+        UNION ALL
+        SELECT
+        end_time
+        FROM
+        visit_probe
+        WHERE 1=1
+        <if test="assetsId!=null and assetsId!=''">
+            and assets_id = #{assetsId}
+        </if>
+        ) a
+        WHERE
+        1 = 1
+        AND a.dday between #{start} and #{end}
+        GROUP BY
+        visitDate
+    </select>
+    <select id="findDistinctByMacAndTime" parameterType="com.seeyoo.visit.bean.VisitBean"
+            resultMap="VisitTimeResultMap">
+        SELECT
+        ROUND(
+        UNIX_TIMESTAMP(t.end_time) - UNIX_TIMESTAMP(t.begin_time)
+        ) AS visitTime,
+        t.mac,
+        count(t.id) as visitCount
+        FROM
+        visit_probe t
+        WHERE
+        DATE_FORMAT(t.end_time, '%Y-%m-%d') = #{time}
+        <if test="assetsId!=null and assetsId!=''">
+            AND t.assets_id = #{assetsId}
+        </if>
+        GROUP BY
+        t.mac
+    </select>
+    <select id="dayVisits" parameterType="com.seeyoo.visit.bean.VisitBean" resultMap="DayVisitResultMap">
+        SELECT
+            count(id) AS visitDayCount,
+            t.mac,
+            t.end_time as time
+        FROM
+            visit_probe t
+        WHERE
+            DATE_FORMAT(t.end_time, '%Y-%m-%d') =#{time}
+        AND assets_id =#{assetsId}
+        GROUP BY
+            t.mac
+    </select>
+    <select id="dayOldVisits" parameterType="com.seeyoo.visit.bean.VisitBean" resultType="java.lang.Integer">
+        select count(id) from visit_probe t
+        where DATE_FORMAT(t.end_time, '%Y-%m-%d') =#{time}
+        and assets_id =#{assetsId} and is_old=1
+    </select>
+    <select id="dayVisitCount" parameterType="com.seeyoo.visit.bean.VisitBean" resultMap="VisitStatisResultMap">
+        SELECT
+        date(t.end_time) AS visitDate,
+        count(id) AS visitCount
+        FROM
+        visit_probe t
+        WHERE
+        (t.end_time BETWEEN #{start} AND #{end})
+        <if test="idList!=null">
+
+            and t.assets_id IN
+            <foreach collection="idList" item="id" index="index"
+                     open="(" close=")" separator=",">
+                #{id}
+            </foreach>
+        </if>
+
+        GROUP BY
+        DATE_FORMAT(t.begin_time, '%Y-%m-%d')
+    </select>
+    <select id="dayVisitVaildCount" parameterType="com.seeyoo.visit.bean.VisitBean" resultMap="VisitStatisResultMap">
+        SELECT
+        date(t.end_time) AS visitDate,
+        count(id) AS visitCount
+        FROM
+        visit_probe t
+        WHERE
+        (
+        ABS(t.db) BETWEEN #{sdb}
+        AND #{edb}
+        )
+        AND (t.end_time BETWEEN #{start} AND #{end})
+        <if test="idList!=null">
+
+            and t.assets_id IN
+            <foreach collection="idList" item="id" index="index"
+                     open="(" close=")" separator=",">
+                #{id}
+            </foreach>
+        </if>
+        GROUP BY
+        DATE_FORMAT(t.end_time, '%Y-%m-%d')
+    </select>
+
+    <select id="getAllVisitTime" parameterType="com.seeyoo.visit.bean.VisitBean" resultType="java.lang.Integer">
+        SELECT COALESCE(sum(dep.dayTime),0) from (
+        SELECT
+        ROUND(
+        UNIX_TIMESTAMP(t.end_time) - UNIX_TIMESTAMP(t.begin_time)
+        ) as dayTime
+        FROM
+        visit_probe t
+        WHERE
+        (t.end_time BETWEEN #{start} AND #{end})
+        <if test="idList!=null">
+
+            and t.assets_id IN
+            <foreach collection="idList" item="id" index="index"
+                     open="(" close=")" separator=",">
+                #{id}
+            </foreach>
+        </if>
+        GROUP BY
+        t.mac
+        ) dep
+    </select>
+    <select id="dayVisiters" parameterType="com.seeyoo.visit.bean.VisitBean" resultMap="DayVisitResultMap">
+        SELECT
+            count(id) AS visitDayCount,
+            t.mac,
+            t.end_time as time
+        FROM
+            visit_probe t
+        WHERE
+            (t.end_time BETWEEN #{start} AND #{end})
+        GROUP BY
+            t.end_time,t.mac
+    </select>
+    <select id="top10Assets" parameterType="com.seeyoo.visit.bean.VisitBean" resultMap="AssetsResultMap">
+        SELECT
+        t1. NAME,
+        avCount
+        FROM
+        (
+        SELECT
+        COUNT(id) AS avcount,
+        assets_id
+        FROM
+        visit_probe t
+        WHERE
+        (t.end_time BETWEEN #{start} AND #{end})
+        <if test="idList!=null">
+
+            and t.assets_id IN
+            <foreach collection="idList" item="id" index="index"
+                     open="(" close=")" separator=",">
+                #{id}
+            </foreach>
+        </if>
+        GROUP BY
+        t.assets_id
+        ) a
+        LEFT JOIN assets t1 ON a.assets_id = t1.id
+        ORDER BY
+        a.avcount DESC
+        LIMIT 0,
+        10
+    </select>
+    <select id="top10VaildAssets" parameterType="com.seeyoo.visit.bean.VisitBean" resultMap="AssetsResultMap">
+        SELECT
+        t1. NAME,
+        avCount
+        FROM
+        (
+        SELECT
+        COUNT(id) AS avcount,
+        assets_id
+        FROM
+        visit_probe t
+        WHERE
+        (t.end_time BETWEEN #{start} AND #{end})
+        <if test="idList!=null">
+
+            and t.assets_id IN
+            <foreach collection="idList" item="id" index="index"
+                     open="(" close=")" separator=",">
+                #{id}
+            </foreach>
+        </if>
+        AND (
+        ABS(t.db) BETWEEN #{sdb}
+        AND #{edb}
+        )
+        GROUP BY
+        t.assets_id
+        ) a
+        LEFT JOIN assets t1 ON a.assets_id = t1.id
+        ORDER BY
+        a.avcount DESC
+        LIMIT 0,
+        10
+    </select>
+    <select id="countOldByTime" parameterType="com.seeyoo.visit.bean.VisitBean" resultType="java.lang.Integer">
+        SELECT count(1) from visit_probe t where t.is_old=1
+        and (t.end_time BETWEEN #{start} AND #{end})
+        <if test="idList!=null">
+
+            and t.assets_id IN
+            <foreach collection="idList" item="id" index="index"
+                     open="(" close=")" separator=",">
+                #{id}
+            </foreach>
+        </if>
+    </select>
+</mapper>

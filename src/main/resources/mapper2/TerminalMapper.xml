@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.seeyoo.visit.mapper2.TerminalMapper">
+  <resultMap id="BaseResultMap" type="com.seeyoo.visit.model.Terminal">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="tgroup_id" jdbcType="BIGINT" property="tgroupId" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="mac" jdbcType="VARCHAR" property="mac" />
+    <result column="devState" jdbcType="VARCHAR" property="devstate" />
+    <result column="dlFileSize" jdbcType="VARCHAR" property="dlfilesize" />
+    <result column="useableSpace" jdbcType="VARCHAR" property="useablespace" />
+    <result column="diskSpace" jdbcType="VARCHAR" property="diskspace" />
+    <result column="playStatus" jdbcType="VARCHAR" property="playstatus" />
+    <result column="taskName" jdbcType="VARCHAR" property="taskname" />
+    <result column="templateID" jdbcType="VARCHAR" property="templateid" />
+    <result column="fileStatus" jdbcType="VARCHAR" property="filestatus" />
+    <result column="playContent" jdbcType="VARCHAR" property="playcontent" />
+    <result column="imd_update_time" jdbcType="TIMESTAMP" property="imdUpdateTime" />
+    <result column="serverIp" jdbcType="VARCHAR" property="serverip" />
+    <result column="serverMac" jdbcType="VARCHAR" property="servermac" />
+    <result column="dev" jdbcType="VARCHAR" property="dev" />
+    <result column="nkVersion" jdbcType="VARCHAR" property="nkversion" />
+    <result column="appVersion" jdbcType="VARCHAR" property="appversion" />
+    <result column="devType" jdbcType="VARCHAR" property="devtype" />
+    <result column="netType" jdbcType="VARCHAR" property="nettype" />
+    <result column="dhcp" jdbcType="VARCHAR" property="dhcp" />
+    <result column="devIP" jdbcType="VARCHAR" property="devip" />
+    <result column="devSubMask" jdbcType="VARCHAR" property="devsubmask" />
+    <result column="devGateWay" jdbcType="VARCHAR" property="devgateway" />
+    <result column="wlanName" jdbcType="VARCHAR" property="wlanname" />
+    <result column="wlanEncryption" jdbcType="VARCHAR" property="wlanencryption" />
+    <result column="wlanPasswd" jdbcType="VARCHAR" property="wlanpasswd" />
+    <result column="mcsAddr" jdbcType="VARCHAR" property="mcsaddr" />
+    <result column="mcsDomain" jdbcType="VARCHAR" property="mcsdomain" />
+    <result column="mcsPort" jdbcType="VARCHAR" property="mcsport" />
+    <result column="subAddr" jdbcType="VARCHAR" property="subaddr" />
+    <result column="subDomain" jdbcType="VARCHAR" property="subdomain" />
+    <result column="subPort" jdbcType="VARCHAR" property="subport" />
+    <result column="mainFtpAddr" jdbcType="VARCHAR" property="mainftpaddr" />
+    <result column="mainFtpDomain" jdbcType="VARCHAR" property="mainftpdomain" />
+    <result column="mainFtpPort" jdbcType="VARCHAR" property="mainftpport" />
+    <result column="mainFtpUser" jdbcType="VARCHAR" property="mainftpuser" />
+    <result column="mainFtpPasswd" jdbcType="VARCHAR" property="mainftppasswd" />
+    <result column="subFtpAddr" jdbcType="VARCHAR" property="subftpaddr" />
+    <result column="subFtpDomain" jdbcType="VARCHAR" property="subftpdomain" />
+    <result column="subFtpPort" jdbcType="VARCHAR" property="subftpport" />
+    <result column="subFtpUser" jdbcType="VARCHAR" property="subftpuser" />
+    <result column="subFtpPasswd" jdbcType="VARCHAR" property="subftppasswd" />
+    <result column="trackAddr" jdbcType="VARCHAR" property="trackaddr" />
+    <result column="trackPort" jdbcType="VARCHAR" property="trackport" />
+    <result column="satAddr" jdbcType="VARCHAR" property="sataddr" />
+    <result column="dwnSpeed" jdbcType="VARCHAR" property="dwnspeed" />
+    <result column="pwrOnOffList" jdbcType="VARCHAR" property="pwronofflist" />
+    <result column="sec1Start" jdbcType="VARCHAR" property="sec1start" />
+    <result column="sec2Start" jdbcType="VARCHAR" property="sec2start" />
+    <result column="sec3Start" jdbcType="VARCHAR" property="sec3start" />
+    <result column="sec4Start" jdbcType="VARCHAR" property="sec4start" />
+    <result column="sec5Start" jdbcType="VARCHAR" property="sec5start" />
+    <result column="sec1End" jdbcType="VARCHAR" property="sec1end" />
+    <result column="sec2End" jdbcType="VARCHAR" property="sec2end" />
+    <result column="sec3End" jdbcType="VARCHAR" property="sec3end" />
+    <result column="sec4End" jdbcType="VARCHAR" property="sec4end" />
+    <result column="sec5End" jdbcType="VARCHAR" property="sec5end" />
+    <result column="w1" jdbcType="VARCHAR" property="w1" />
+    <result column="w2" jdbcType="VARCHAR" property="w2" />
+    <result column="w3" jdbcType="VARCHAR" property="w3" />
+    <result column="w4" jdbcType="VARCHAR" property="w4" />
+    <result column="w5" jdbcType="VARCHAR" property="w5" />
+    <result column="w6" jdbcType="VARCHAR" property="w6" />
+    <result column="w7" jdbcType="VARCHAR" property="w7" />
+    <result column="d1" jdbcType="VARCHAR" property="d1" />
+    <result column="d2" jdbcType="VARCHAR" property="d2" />
+    <result column="d3" jdbcType="VARCHAR" property="d3" />
+    <result column="d4" jdbcType="VARCHAR" property="d4" />
+    <result column="d5" jdbcType="VARCHAR" property="d5" />
+    <result column="d6" jdbcType="VARCHAR" property="d6" />
+    <result column="d7" jdbcType="VARCHAR" property="d7" />
+    <result column="d8" jdbcType="VARCHAR" property="d8" />
+    <result column="g1" jdbcType="VARCHAR" property="g1" />
+    <result column="g2" jdbcType="VARCHAR" property="g2" />
+    <result column="g3" jdbcType="VARCHAR" property="g3" />
+    <result column="g4" jdbcType="VARCHAR" property="g4" />
+    <result column="g5" jdbcType="VARCHAR" property="g5" />
+    <result column="timeMode" jdbcType="VARCHAR" property="timemode" />
+    <result column="downloadTime" jdbcType="VARCHAR" property="downloadtime" />
+    <result column="timeShow" jdbcType="VARCHAR" property="timeshow" />
+    <result column="volume" jdbcType="VARCHAR" property="volume" />
+    <result column="brightnessBL" jdbcType="VARCHAR" property="brightnessbl" />
+    <result column="brightnessPIC" jdbcType="VARCHAR" property="brightnesspic" />
+    <result column="contrast" jdbcType="VARCHAR" property="contrast" />
+    <result column="saturation" jdbcType="VARCHAR" property="saturation" />
+    <result column="dayNum" jdbcType="VARCHAR" property="daynum" />
+    <result column="dirDay" jdbcType="VARCHAR" property="dirday" />
+    <result column="mode" jdbcType="VARCHAR" property="mode" />
+    <result column="connect_status" jdbcType="TINYINT" property="connectStatus" />
+    <result column="connect_time" jdbcType="TIMESTAMP" property="connectTime" />
+    <result column="disconnect_time" jdbcType="TIMESTAMP" property="disconnectTime" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="preDwn" jdbcType="VARCHAR" property="predwn" />
+    <result column="p2p" jdbcType="VARCHAR" property="p2p" />
+    <result column="sync" jdbcType="VARCHAR" property="sync" />
+    <result column="thirdTask" jdbcType="VARCHAR" property="thirdtask" />
+    <result column="thirdPath" jdbcType="VARCHAR" property="thirdpath" />
+    <result column="thirdTimeout" jdbcType="VARCHAR" property="thirdtimeout" />
+    <result column="thirdVersion" jdbcType="VARCHAR" property="thirdversion" />
+    <result column="torg_id" jdbcType="INTEGER" property="torgId" />
+    <result column="task_id" jdbcType="BIGINT" property="taskId" />
+    <result column="default_task_id" jdbcType="BIGINT" property="defaultTaskId" />
+    <result column="tel_enable" jdbcType="SMALLINT" property="telEnable" />
+    <result column="tel" jdbcType="VARCHAR" property="tel" />
+    <result column="ad_use_count" jdbcType="INTEGER" property="adUseCount" />
+    <result column="ad_count" jdbcType="INTEGER" property="adCount" />
+    <result column="rx" jdbcType="BIGINT" property="rx" />
+    <result column="tx" jdbcType="BIGINT" property="tx" />
+    <result column="iccid" jdbcType="VARCHAR" property="iccid" />
+    <result column="default_task_date" jdbcType="TIMESTAMP" property="defaultTaskDate" />
+  </resultMap>
+  <select id="tgroupIdByMac" resultType="java.lang.Long" parameterType="java.lang.String">
+    select tgroup_id from terminal where mac=#{mac}
+  </select>
+</mapper>
