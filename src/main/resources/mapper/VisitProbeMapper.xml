@@ -211,7 +211,7 @@
         visit_probe t
         WHERE
         (t.end_time BETWEEN #{start} AND #{end})
-        <if test="idList!=null">
+        <if test="idList!=null and idList.length>0">
 
             and t.assets_id IN
             <foreach collection="idList" item="id" index="index"
