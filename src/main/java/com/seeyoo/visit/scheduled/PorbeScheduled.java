@@ -30,12 +30,12 @@ public class PorbeScheduled {
      * creat_date: 2019/6/5
      * creat_time: 16:10
      **/
-    @Scheduled(cron = "0/60 * * * * *")
+    @Scheduled(cron = "0 0/10 * * * *")
     @Transactional
     public void GetProbe() {
         Example example = new Example(Assets.class);
         Example.Criteria criteria = example.createCriteria();
-        criteria.andIsNull("tgroupCode");
+//        criteria.andIsNull("tgroupCode");
         List<Assets> assets = assetsService.selectByExample(example);
         System.out.println("Ungrouped data>>>>>>>>>>>>>>>>>>" + assets.size());
         if (assets.size() > 0) {
