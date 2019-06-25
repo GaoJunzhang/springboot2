@@ -24,7 +24,7 @@ public interface VisitProbeService extends IService<VisitProbe> {
 
     public List<VisitStatisBean> dayVisitVaildCount(Timestamp start, Timestamp end, int sdb, int edb, int[] idList,String code);
 
-    public int getAllVisitTime(Timestamp start, Timestamp end, int[] idList,String code);
+    public long getAllVisitTime(Timestamp start, Timestamp end, int[] idList,String code);
 
     public List<DayVisitBean> dayVisiters(Timestamp start, Timestamp end);
 

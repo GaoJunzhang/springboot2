@@ -30,8 +30,8 @@ public class PorbeScheduled {
      * creat_date: 2019/6/5
      * creat_time: 16:10
      **/
-    @Scheduled(cron = "0 0/10 * * * *")
-    @Transactional
+//    @Scheduled(cron = "0 0/10 * * * *")
+//    @Transactional
     public void GetProbe() {
         Example example = new Example(Assets.class);
         Example.Criteria criteria = example.createCriteria();

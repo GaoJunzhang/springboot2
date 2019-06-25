@@ -26,7 +26,7 @@ public interface VisitProbeMapper extends MyMapper<VisitProbe> {
 
     public List<VisitStatisBean> dayVisitVaildCount(@Param("start") Timestamp start, @Param("end") Timestamp end, @Param("sdb") int sdb, @Param("edb") int edb, @Param("idList") int[] idList,@Param("code") String code);
 
-    public int getAllVisitTime(@Param("start") Timestamp start, @Param("end") Timestamp end, @Param("idList") int[] idList,@Param("code") String code);
+    public long getAllVisitTime(@Param("start") Timestamp start, @Param("end") Timestamp end, @Param("idList") int[] idList,@Param("code") String code);
 
     public List<DayVisitBean> dayVisiters(@Param("start") Timestamp start, @Param("end") Timestamp end);
 

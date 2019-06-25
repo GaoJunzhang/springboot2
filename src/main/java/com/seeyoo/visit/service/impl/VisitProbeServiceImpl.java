@@ -46,7 +46,7 @@ public class VisitProbeServiceImpl extends BaseService<VisitProbe> implements Vi
         return visitProbeMapper.dayVisitVaildCount(start, end, sdb, edb, idList,code);
     }
 
-    public int getAllVisitTime(Timestamp start, Timestamp end, int[] idList,String code) {
+    public long getAllVisitTime(Timestamp start, Timestamp end, int[] idList,String code) {
         return visitProbeMapper.getAllVisitTime(start, end,idList,code);
     }
 

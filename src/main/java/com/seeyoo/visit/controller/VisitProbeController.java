@@ -331,7 +331,7 @@ public class VisitProbeController {
             visitRecordBeans.add(visitRecordBean);
             startCalendar.add(Calendar.DATE, 1);
         }
-        int visitAllTime = visitProbeService.getAllVisitTime(Timestamp.valueOf(startDate + " 00:00:00"), Timestamp.valueOf(endDate + " 23:59:59"), macs,code);//所有访问时间
+        long visitAllTime = visitProbeService.getAllVisitTime(Timestamp.valueOf(startDate + " 00:00:00"), Timestamp.valueOf(endDate + " 23:59:59"), macs,code);//所有访问时间
         int oldCustomer = visitProbeService.countOldByTime(Timestamp.valueOf(startDate + " 00:00:00"), Timestamp.valueOf(endDate + " 23:59:59"), macs,code);//时间范围内访问的老客户
         map.put("visitAllTime", visitAllTime);
         map.put("list", visitRecordBeans);
