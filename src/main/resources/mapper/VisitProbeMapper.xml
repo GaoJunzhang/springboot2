@@ -65,8 +65,7 @@
         </if>
         ) a
         WHERE
-        1 = 1
-        AND a.dday between #{start} and #{end}
+        a.dday between #{start} and #{end}
         GROUP BY
         visitDate
     </select>
@@ -159,7 +158,7 @@
         DATE_FORMAT(t.end_time, '%Y-%m-%d')
     </select>
 
-    <select id="getAllVisitTime" parameterType="com.seeyoo.visit.bean.VisitBean" resultType="java.lang.Integer">
+    <select id="getAllVisitTime" parameterType="com.seeyoo.visit.bean.VisitBean" resultType="java.lang.Long">
         SELECT COALESCE(sum(dep.dayTime),0) from (
         SELECT
         ROUND(

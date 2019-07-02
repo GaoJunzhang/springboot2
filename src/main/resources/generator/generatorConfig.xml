@@ -14,17 +14,17 @@
             <property name="mappers" value="com.seeyoo.visit.util.MyMapper"/>
         </plugin>
         <!-- 数据库链接URL，用户名、密码 -->
-        <jdbcConnection driverClass="${spring.datasource.mps.driver-class-name}"
-                        connectionURL="${spring.datasource.mps.url}"
-                        userId="${spring.datasource.mps.username}"
-                        password="${spring.datasource.mps.password}">
+        <jdbcConnection driverClass="${spring.datasource.visit.driver-class-name}"
+                        connectionURL="${spring.datasource.visit.url}"
+                        userId="${spring.datasource.visit.username}"
+                        password="${spring.datasource.visit.password}">
         </jdbcConnection>
         <!--生成Model类存放位置-->
         <javaModelGenerator targetPackage="com.seeyoo.visit.model" targetProject="src/main/java"/>
         <!--生成映射文件存放位置-->
-        <sqlMapGenerator targetPackage="mapper2" targetProject="src/main/resources"/>
+        <sqlMapGenerator targetPackage="mapper" targetProject="src/main/resources"/>
         <!--生成Dao类存放位置-->
-        <javaClientGenerator targetPackage="com.seeyoo.visit.mapper2" targetProject="src/main/java"
+        <javaClientGenerator targetPackage="com.seeyoo.visit.mapper" targetProject="src/main/java"
                              type="XMLMAPPER"/>
 
         <!--<table tableName="%">
@@ -55,7 +55,7 @@
                enableDeleteByExample="false" enableSelectByExample="false"
                selectByExampleQueryId="false">
         </table>-->
-        <table tableName="tgroup" domainObjectName="Tgroup"
+        <table tableName="cron_vo" domainObjectName="CronVo"
                enableCountByExample="false" enableUpdateByExample="false"
                enableDeleteByExample="false" enableSelectByExample="false"
                selectByExampleQueryId="false">

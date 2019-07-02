@@ -79,7 +79,14 @@ public class ApiController {
                         JSONArray macsArry = JSONArray.fromObject(obj.get("macs"));
                         for (int j = 0; j < macsArry.size(); j++) {
                             macObj = JSONObject.fromObject(macsArry.get(j));
-                            VisitProbe visitProbe = visitProbeService.selectByMacAndTimeAndAssetsId(macObj.get("mac") + "",Timestamp.valueOf(macObj.get("begin")+""),assetsId);
+//                            VisitProbe visitProbe = visitProbeService.selectByMacAndTimeAndAssetsId(macObj.get("mac") + "",Timestamp.valueOf(macObj.get("begin")+""),assetsId);
+                            Example example2 = new Example(VisitProbe.class);
+                            example2.createCriteria().andEqualTo("mac",macObj.get("mac")).andEqualTo("beginTime",Timestamp.valueOf(macObj.get("begin")+"")).andEqualTo("assetsId",assetsId);
+                            List<VisitProbe> visitProbes = visitProbeService.selectByExample(example2);
+                            VisitProbe visitProbe = null;
+                            if (visitProbes.size()>0){
+                                visitProbe = visitProbes.get(0);
+                            }
                             Example example1 = new Example(OldCustomers.class);
                             example1.createCriteria().andEqualTo("mac",macObj.get("mac"));
                             List<OldCustomers> oldCustomers = oldCustomersService.selectByExample(example1);
