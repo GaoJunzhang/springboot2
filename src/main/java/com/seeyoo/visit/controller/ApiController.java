@@ -181,6 +181,7 @@ public class ApiController {
             } else {
                 assetsId = assetses.get(0).getId();
             }
+            List<VisitCamera> visitCameras = new ArrayList<>(list.size());
             for (int i = 0; i < list.size(); i++) {
                 JSONObject mObj = JSONObject.fromObject(list.get(i));
                 VisitCamera visitCamera = new VisitCamera();
@@ -192,8 +193,10 @@ public class ApiController {
                 visitCamera.setAssetsId(assetsId);
                 visitCamera.setStay(Integer.parseInt(mObj.get("stay") + ""));
                 visitCamera.setVisitId(Long.parseLong(mObj.get("id") + ""));
-                visitCameraService.save(visitCamera);
+                visitCameras.add(visitCamera);
+//                visitCameraService.save(visitCamera);
             }
+            visitCameraService.saveList(visitCameras);
         } catch (NumberFormatException e) {
             return ResultVO.getFailed("Request Exception", e);
         }
