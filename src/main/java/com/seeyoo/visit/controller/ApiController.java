@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 import tk.mybatis.mapper.entity.Example;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -52,7 +53,7 @@ public class ApiController {
             return ResultVO.getFailed("Terminal Mac Unavailable,Field 'mac' is Null!");
         }
         Example example = new Example(Assets.class);
-        example.createCriteria().andEqualTo("mac",jsonObject.get("mac")).andEqualTo("type",0);
+        example.createCriteria().andEqualTo("mac", jsonObject.get("mac")).andEqualTo("type", 0);
         List<Assets> assetses = assetsService.selectByExample(example);
         int assetsId = 0;
         if (assetses.size() <= 0) {
@@ -63,13 +64,16 @@ public class ApiController {
             assets.setType((short) 0);
             assetsService.save(assets);
             assetsId = assets.getId();
-        }else {
+        } else {
             assetsId = assetses.get(0).getId();
         }
         JSONArray list = JSONArray.fromObject(jsonObject.get("list"));
         Timestamp time1 = new Timestamp(System.currentTimeMillis());
         JSONObject obj = null;
         JSONObject macObj = null;
+        List<OldCustomers> OldVisitProbes = new ArrayList<>();
+        List<VisitProbe> newVisitProbes = new ArrayList<>();
+        List<VisitProbe> newUVisitProbes = new ArrayList<>();
         try {
             if (list.size() > 0) {
                 for (int i = 0; i < list.size(); i++) {
@@ -77,54 +81,74 @@ public class ApiController {
                     time1 = Timestamp.valueOf(obj.get("time") + "");
                     if (obj.containsKey("macs")) {
                         JSONArray macsArry = JSONArray.fromObject(obj.get("macs"));
+                        //老用户
+
+                        //新用户
                         for (int j = 0; j < macsArry.size(); j++) {
+
                             macObj = JSONObject.fromObject(macsArry.get(j));
 //                            VisitProbe visitProbe = visitProbeService.selectByMacAndTimeAndAssetsId(macObj.get("mac") + "",Timestamp.valueOf(macObj.get("begin")+""),assetsId);
                             Example example2 = new Example(VisitProbe.class);
-                            example2.createCriteria().andEqualTo("mac",macObj.get("mac")).andEqualTo("beginTime",Timestamp.valueOf(macObj.get("begin")+"")).andEqualTo("assetsId",assetsId);
+                            example2.createCriteria().andEqualTo("mac", macObj.get("mac")).andEqualTo("beginTime", Timestamp.valueOf(macObj.get("begin") + "")).andEqualTo("assetsId", assetsId);
                             List<VisitProbe> visitProbes = visitProbeService.selectByExample(example2);
                             VisitProbe visitProbe = null;
-                            if (visitProbes.size()>0){
+                            if (visitProbes.size() > 0) {
                                 visitProbe = visitProbes.get(0);
                             }
                             Example example1 = new Example(OldCustomers.class);
-                            example1.createCriteria().andEqualTo("mac",macObj.get("mac"));
+                            example1.createCriteria().andEqualTo("mac", macObj.get("mac"));
                             List<OldCustomers> oldCustomers = oldCustomersService.selectByExample(example1);
                             short isOld = 0;
                             if (oldCustomers.size() <= 0) {
                                 OldCustomers oldCustomers1 = new OldCustomers();
                                 oldCustomers1.setCreateTime(time1);
                                 oldCustomers1.setMac(macObj.get("mac") + "");
-                                oldCustomersService.save(oldCustomers1);
-                            }else {
+                                OldVisitProbes.add(oldCustomers1);
+//                                oldCustomersService.save(oldCustomers1);//TODO
+                            } else {
                                 OldCustomers oldTmp = oldCustomers.get(0);
-                                if (time1.getTime()-oldTmp.getCreateTime().getTime()>=oldTime){
-                                    isOld=1;
+                                if (time1.getTime() - oldTmp.getCreateTime().getTime() >= oldTime) {
+                                    isOld = 1;
                                 }
                             }
-                            if (visitProbe==null){
+                            if (visitProbe == null) {
                                 visitProbe = new VisitProbe();
-                                visitProbe.setBeginTime(Timestamp.valueOf(macObj.get("begin")+""));
-                                visitProbe.setEndTime(Timestamp.valueOf(macObj.get("end")+""));
+                                visitProbe.setBeginTime(Timestamp.valueOf(macObj.get("begin") + ""));
+                                visitProbe.setEndTime(Timestamp.valueOf(macObj.get("end") + ""));
                                 visitProbe.setMac(macObj.get("mac") + "");
                                 visitProbe.setAssetsId(assetsId);
                                 visitProbe.setDb(Integer.parseInt(macObj.get("db") + ""));
                                 visitProbe.setIsOld(isOld);
                                 visitProbe.setTime(new Timestamp(System.currentTimeMillis()));
-                                visitProbeService.save(visitProbe);
-                            }else {
-                                if (visitProbe.getDb()<Integer.parseInt(macObj.get("db") + "")){
+                                newVisitProbes.add(visitProbe);
+//                                visitProbeService.save(visitProbe);//TODO
+                            } else {
+                                if (visitProbe.getDb() < Integer.parseInt(macObj.get("db") + "")) {
 
                                     visitProbe.setDb(Integer.parseInt(macObj.get("db") + ""));
                                 }
-                                visitProbe.setEndTime(Timestamp.valueOf(macObj.get("end")+""));
+                                visitProbe.setEndTime(Timestamp.valueOf(macObj.get("end") + ""));
                                 visitProbe.setIsOld(isOld);
                                 visitProbe.setTime(new Timestamp(System.currentTimeMillis()));
-                                visitProbeService.updateNotNull(visitProbe);
+                                newUVisitProbes.add(visitProbe);
+//                                visitProbeService.updateNotNull(visitProbe);//TODO
                             }
                         }
+
                     }
                 }
+            }
+            if (OldVisitProbes.size() > 0) {
+
+                oldCustomersService.saveList(OldVisitProbes);//批量保存老用户
+            }
+            if (newVisitProbes.size() > 0) {
+
+                visitProbeService.saveList(newVisitProbes);//批量保存新用户
+            }
+            if (newUVisitProbes.size() > 0) {
+
+                visitProbeService.batchUpdate(newUVisitProbes);//批量更新新用户
             }
         } catch (NumberFormatException e) {
             return ResultVO.getFailed("Request Exception!", e);
@@ -143,7 +167,7 @@ public class ApiController {
             }
             JSONArray list = JSONArray.fromObject(jsonObject.get("list"));
             Example example = new Example(Assets.class);
-            example.createCriteria().andEqualTo("mac",jsonObject.get("mac")).andEqualTo("type",1);
+            example.createCriteria().andEqualTo("mac", jsonObject.get("mac")).andEqualTo("type", 1);
             List<Assets> assetses = assetsService.selectByExample(example);
             int assetsId = 0;
             if (assetses.size() <= 0) {
@@ -153,21 +177,21 @@ public class ApiController {
                 assets.setTime(new Timestamp(System.currentTimeMillis()));
                 assets.setType((short) 1);
                 assetsService.save(assets);
-                assetsId =assets.getId();
-            }else {
+                assetsId = assets.getId();
+            } else {
                 assetsId = assetses.get(0).getId();
             }
             for (int i = 0; i < list.size(); i++) {
                 JSONObject mObj = JSONObject.fromObject(list.get(i));
                 VisitCamera visitCamera = new VisitCamera();
                 visitCamera.setAge(Integer.parseInt(mObj.get("age") + ""));
-                visitCamera.setGender( Short.parseShort(mObj.get("gender") + ""));
-                visitCamera.setBeauty( Integer.parseInt(mObj.get("beauty") + ""));
+                visitCamera.setGender(Short.parseShort(mObj.get("gender") + ""));
+                visitCamera.setBeauty(Integer.parseInt(mObj.get("beauty") + ""));
                 visitCamera.setStamp(Timestamp.valueOf(mObj.get("stamp") + ""));
                 visitCamera.setTime(Timestamp.valueOf(mObj.get("stamp") + ""));
                 visitCamera.setAssetsId(assetsId);
                 visitCamera.setStay(Integer.parseInt(mObj.get("stay") + ""));
-                visitCamera.setVisitId(Long.parseLong(mObj.get("id")+""));
+                visitCamera.setVisitId(Long.parseLong(mObj.get("id") + ""));
                 visitCameraService.save(visitCamera);
             }
         } catch (NumberFormatException e) {

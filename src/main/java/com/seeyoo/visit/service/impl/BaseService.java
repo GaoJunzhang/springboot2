@@ -27,19 +27,27 @@ package com.seeyoo.visit.service.impl;
 import com.seeyoo.visit.service.IService;
 import org.springframework.beans.factory.annotation.Autowired;
 import tk.mybatis.mapper.common.Mapper;
+import tk.mybatis.mapper.common.MySqlMapper;
 
 import java.util.List;
 
 /**
  * Created by liuzh on 2014/12/11.
  */
-public abstract class BaseService<T> implements IService<T> {
+public abstract class BaseService<T>  implements IService<T> {
 
     @Autowired
     protected Mapper<T> mapper;
 
+    @Autowired
+    private MySqlMapper<T> mySqlMapper;
+
     public Mapper<T> getMapper() {
         return mapper;
+    }
+
+    public MySqlMapper<T> getMySqlMapper() {
+        return mySqlMapper;
     }
 
     @Override
@@ -72,4 +80,7 @@ public abstract class BaseService<T> implements IService<T> {
     }
 
     //TODO 其他...
+    public int saveList(List<T> list){
+        return mySqlMapper.insertList(list);
+    }
 }

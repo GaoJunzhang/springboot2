@@ -36,4 +36,6 @@ public interface VisitProbeService extends IService<VisitProbe> {
 
     public int dayOldVisits(String time, Integer assetsId);
 
+    public int batchUpdate(List<VisitProbe> list);
+
 }

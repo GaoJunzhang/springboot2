@@ -69,4 +69,6 @@ public class VisitProbeServiceImpl extends BaseService<VisitProbe> implements Vi
     public int dayOldVisits(String time, Integer assetsId) {
         return visitProbeMapper.dayOldVisits(time, assetsId);
     }
+
+    public int batchUpdate(List<VisitProbe> list){return visitProbeMapper.batchUpdate(list);}
 }

@@ -45,5 +45,7 @@ public interface IService<T> {
     List<T> selectByExample(Object example);
 
     public List<T> selectAll();
+
+    public int saveList(List<T> list);
     //TODO 其他...
 }
