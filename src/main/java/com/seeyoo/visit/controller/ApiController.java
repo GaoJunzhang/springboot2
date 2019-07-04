@@ -196,7 +196,9 @@ public class ApiController {
                 visitCameras.add(visitCamera);
 //                visitCameraService.save(visitCamera);
             }
-            visitCameraService.saveList(visitCameras);
+            if (visitCameras.size()>0){
+                visitCameraService.saveList(visitCameras);
+            }
         } catch (NumberFormatException e) {
             return ResultVO.getFailed("Request Exception", e);
         }
